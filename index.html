@@ -49,6 +49,12 @@ p{margin:0 0 1rem}
 .note{font-size:.95rem;color:var(--muted)}
 
 .eq{display:block;text-align:center;margin:1.25rem 0;overflow-x:auto;overflow-y:hidden;padding:.25rem 0}
+.eq.multi{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;column-gap:2.2em;row-gap:.65rem}
+.boxed.multi{display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;column-gap:2em;row-gap:.6rem;max-width:100%}
+.eqp{max-width:100%}
+.eqp.sep{margin-left:1.85em}
+.multi:not(.chain) > .eqp.cont{margin-left:-1.85em}
+.multi.chain{column-gap:.35em}
 mjx-container{color:inherit}
 mjx-container[display="true"]{margin:0 !important}
 .stats mjx-container,.legend mjx-container,.cap mjx-container,.ctl small mjx-container{font-size:105%}
@@ -121,7 +127,7 @@ window.MathJax = {
   <div class="prose">
     <p>Classically, the radiation inside a box is a combination of standing-wave patterns, each behaving as a harmonic oscillator with frequency \(f = c/\lambda\). Each oscillator has two quadratic degrees of freedom, so equipartition gives it an average energy \(\bar{E} = k_{\mathrm{B}}T\). But there are infinitely many modes, most of them at very short wavelengths, so the total thermal energy would be infinite. That cannot be physically true.</p>
     <p>Planck’s solution: a quantum oscillator has energies \(E_n = 0, hf, 2hf, \ldots\) (dropping the zero-point energy, which only multiplies \(Z\) by a constant). The partition function of a single oscillator is a geometric series,</p>
-    <div class="eq">\[ Z = \sum_{n=0}^{\infty} e^{-n\beta hf} = \frac{1}{1 - e^{-\beta hf}}, \qquad \bar{E} = -\frac{\partial \ln Z}{\partial \beta} = \frac{hf}{e^{hf/k_{\mathrm{B}}T} - 1} \]</div>
+    <div class="eq multi"><span class="eqp">\( \displaystyle Z = \sum_{n=0}^{\infty} e^{-n\beta hf} = \frac{1}{1 - e^{-\beta hf}}, \)</span><span class="eqp">\( \displaystyle \bar{E} = -\frac{\partial \ln Z}{\partial \beta} = \frac{hf}{e^{hf/k_{\mathrm{B}}T} - 1} \)</span></div>
     <p>and the average number of energy units in the oscillator is the Planck distribution:</p>
     <div class="eq"><span class="boxed">\( \displaystyle \bar{n}_{\mathrm{Pl}} = \frac{1}{e^{hf/k_{\mathrm{B}}T} - 1} \)</span></div>
     <p>Modes with \(hf \gg k_{\mathrm{B}}T\) are exponentially suppressed, “frozen out,” and the catastrophe disappears. Slide the mode frequency to compare.</p>
@@ -158,7 +164,7 @@ window.MathJax = {
   <div class="prose">
     <p>Now take the units of field energy seriously as particles called photons. They are bosons and should follow the Bose–Einstein distribution with \(\varepsilon = hf\). Photons can be created or destroyed in any quantity, so their number is not conserved: \(N\) takes whatever value minimizes \(F\), which means \((\partial F/\partial N)_{T,V} = \mu = 0\). Then \(\bar{n}_{\mathrm{BE}}\) is exactly \(\bar{n}_{\mathrm{Pl}}\).</p>
     <p>Photons are ultrarelativistic, \(\varepsilon = pc = hcn/2L\) with \(n = |\vec{n}|\), and come in two independent polarizations (playing the role of the electrons’ two spin states). Summing \(\varepsilon\,\bar{n}_{\mathrm{Pl}}\) over all modes in the eighth-sphere of \(n\)-space gives</p>
-    <div class="eq">\[ U = 2\sum_{n_x,n_y,n_z} \varepsilon\, \bar{n}_{\mathrm{Pl}}(\varepsilon) \approx \pi \int_0^\infty n^2\, dn\, \frac{hcn}{2L}\,\frac{1}{e^{hcn/2Lk_{\mathrm{B}}T} - 1} \quad\Longrightarrow\quad \frac{U}{V} = \int_0^\infty \frac{8\pi\varepsilon^3/(hc)^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1}\, d\varepsilon \]</div>
+    <div class="eq multi"><span class="eqp">\( \displaystyle U = 2\sum_{n_x,n_y,n_z} \varepsilon\, \bar{n}_{\mathrm{Pl}}(\varepsilon) \)</span><span class="eqp cont">\( \displaystyle \approx \pi \int_0^\infty n^2\, dn\, \frac{hcn}{2L}\,\frac{1}{e^{hcn/2Lk_{\mathrm{B}}T} - 1} \)</span><span class="eqp">\( \displaystyle \Longrightarrow\; \frac{U}{V} = \int_0^\infty \frac{8\pi\varepsilon^3/(hc)^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1}\, d\varepsilon \)</span></div>
     <p>The integrand is the spectrum: the energy density per unit photon energy,</p>
     <div class="eq"><span class="boxed">\( \displaystyle u(\varepsilon) = \frac{8\pi}{(hc)^3}\,\frac{\varepsilon^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1} \)</span></div>
     <p>With \(x = \varepsilon/k_{\mathrm{B}}T\) its shape is \(x^3/(e^x - 1)\), which peaks at \(x = 2.82\). Higher temperature means higher photon energies, larger frequency, and shorter wavelength: Wien’s law.</p>
@@ -206,7 +212,7 @@ window.MathJax = {
   <h3>Per wavelength is not per energy</h3>
   <div class="prose">
     <p>Problem 7.39. Changing variables to \(\lambda = hc/\varepsilon\), with \(d\varepsilon = -hc\,d\lambda/\lambda^2\), gives the energy density per unit wavelength:</p>
-    <div class="eq">\[ u(\lambda) = \frac{8\pi hc}{\lambda^5}\,\frac{1}{e^{hc/\lambda k_{\mathrm{B}}T} - 1}, \qquad \lambda_{\max} = 0.2014\,\frac{hc}{k_{\mathrm{B}}T} \neq \frac{hc}{2.82\,k_{\mathrm{B}}T} = 0.3546\,\frac{hc}{k_{\mathrm{B}}T} \]</div>
+    <div class="eq multi"><span class="eqp">\( \displaystyle u(\lambda) = \frac{8\pi hc}{\lambda^5}\,\frac{1}{e^{hc/\lambda k_{\mathrm{B}}T} - 1}, \)</span><span class="eqp">\( \displaystyle \lambda_{\max} = 0.2014\,\frac{hc}{k_{\mathrm{B}}T} \)</span><span class="eqp cont">\( \displaystyle \neq \frac{hc}{2.82\,k_{\mathrm{B}}T} = 0.3546\,\frac{hc}{k_{\mathrm{B}}T} \)</span></div>
     <p>The two peaks disagree because \(\lambda \propto 1/\varepsilon\) is nonlinear: equal intervals \(d\varepsilon\) correspond to unequal intervals \(d\lambda \propto d\varepsilon/\varepsilon^2\). Compare the last two rows of the panel. For sunlight, \(u(\varepsilon)\) peaks at 1.41 eV, which corresponds to 880 nm in the near infrared, yet \(u(\lambda)\) peaks near 500 nm.</p>
   </div>
 </section>
@@ -218,9 +224,9 @@ window.MathJax = {
     <p>Integrating the spectrum with \(\int_0^\infty x^3/(e^x-1)\,dx = \pi^4/15\) gives the total energy, and the rest follow:</p>
     <div class="eq"><span class="boxed">\( \displaystyle \frac{U}{V} = \frac{8\pi^5 (k_{\mathrm{B}}T)^4}{15 (hc)^3} \propto T^4 \)</span></div>
     <p>Doubling the temperature multiplies the energy by 16. Dimensional analysis already suggests this: each photon carries something of order \(k_{\mathrm{B}}T\), and the only relevant length is the photons’ typical wavelength \(hc/k_{\mathrm{B}}T\). The density of states (Problem 7.40) is \(g(\varepsilon) = 8\pi V\varepsilon^2/(hc)^3\).</p>
-    <div class="eq">\[ C_V = 4aT^3, \qquad S = \frac{32\pi^5}{45}\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 k_{\mathrm{B}}, \qquad N = 16\pi\,\zeta(3)\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 \]</div>
+    <div class="eq multi"><span class="eqp">\( \displaystyle C_V = 4aT^3, \)</span><span class="eqp">\( \displaystyle S = \frac{32\pi^5}{45}\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 k_{\mathrm{B}}, \)</span><span class="eqp">\( \displaystyle N = 16\pi\,\zeta(3)\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 \)</span></div>
     <p>with \(a = 8\pi^5 k_{\mathrm{B}}^4 V/15(hc)^3\) and \(\int_0^\infty x^2/(e^x-1)\,dx = 2\zeta(3) \approx 2.404\) (Problem 7.44). \(S\) and \(N\) share the same dependence on \(V(k_{\mathrm{B}}T/hc)^3\), so the entropy per photon is a constant, \(S/N \approx 3.6\,k_{\mathrm{B}}\). For the pressure (Problem 7.45) and free energy (Problem 7.46),</p>
-    <div class="eq">\[ P = -\left(\frac{\partial U}{\partial V}\right)_{S,N} = \frac13\,\frac{U}{V}, \qquad F = U - TS = -\frac13 U \]</div>
+    <div class="eq multi"><span class="eqp">\( \displaystyle P = -\left(\frac{\partial U}{\partial V}\right)_{S,N} = \frac13\,\frac{U}{V}, \)</span><span class="eqp">\( \displaystyle F = U - TS = -\frac13 U \)</span></div>
     <p>and \(F\) can also be found mode by mode as \(-k_{\mathrm{B}}T\ln Z\), with the same result. Pick a temperature to see the numbers.</p>
   </div>
 
@@ -288,7 +294,7 @@ window.MathJax = {
 
   <div class="prose" style="margin-top:1.5rem">
     <p>The chunk holds energy \((U/V)\,R^2\sin\theta\,d\theta\,d\phi\,c\,dt\), and a fraction \(A\cos\theta/4\pi R^2\) of it heads for the hole; \(R\) cancels. Integrating over \(\phi\) from 0 to \(2\pi\) and \(\theta\) from 0 to \(\pi/2\),</p>
-    <div class="eq">\[ \text{energy escaping} = \int_0^{2\pi}\! d\phi \int_0^{\pi/2}\! d\theta\, \frac{A\cos\theta}{4\pi}\,\frac{U}{V}\,c\,dt\,\sin\theta = \frac{A}{4}\,\frac{U}{V}\,c\,dt \]</div>
+    <div class="eq multi chain"><span class="eqp">\( \displaystyle \text{energy escaping} \)</span><span class="eqp">\( \displaystyle = \int_0^{2\pi}\! d\phi \int_0^{\pi/2}\! d\theta\, \frac{A\cos\theta}{4\pi}\,\frac{U}{V}\,c\,dt\,\sin\theta \)</span><span class="eqp">\( \displaystyle = \frac{A}{4}\,\frac{U}{V}\,c\,dt \)</span></div>
     <p>The factor of \(\tfrac14\) is easy to check by brute force. Below, 2000 photons fly around a box at speed \(c\), bouncing off the walls; any that hit the hole escape. To keep the radiation inside in equilibrium, each is replaced by a photon entering through the hole, as if the hole opened onto more radiation at the same temperature. Compare the counted escape rate with \(\tfrac14 (N/V)\,c\,A\), and the escape angles with \(\sin\theta\cos\theta\).</p>
   </div>
 
@@ -324,7 +330,7 @@ window.MathJax = {
   </div>
 
   <div class="prose" style="margin-top:1.5rem">
-    <div class="eq"><span class="boxed">\( \displaystyle \frac{\text{power}}{\text{area}} = \frac{c}{4}\frac{U}{V} = \frac{2\pi^5}{15}\frac{(k_{\mathrm{B}}T)^4}{h^3c^2} = \sigma T^4, \qquad \sigma = 5.67 \times 10^{-8}\ \mathrm{W\,m^{-2}\,K^{-4}} \)</span></div>
+    <div class="eq"><span class="boxed multi"><span class="eqp">\( \displaystyle \frac{\text{power}}{\text{area}} = \frac{c}{4}\frac{U}{V} = \frac{2\pi^5}{15}\frac{(k_{\mathrm{B}}T)^4}{h^3c^2} = \sigma T^4, \)</span><span class="eqp">\( \displaystyle \sigma = 5.67 \times 10^{-8}\ \mathrm{W\,m^{-2}\,K^{-4}} \)</span></span></div>
     <p>This is Stefan’s law, discovered empirically in 1879 (remember “5–6–7–8”). Any nonreflecting (“black”) surface at the same temperature must emit the same power, and indeed the same entire spectrum, as the hole; otherwise placing it next to the hole, with a wavelength filter in between, would violate the second law. A surface that reflects some photons emits correspondingly less: power \(= \sigma e A T^4\), where \(e\) is the emissivity.</p>
   </div>
 </section>
@@ -346,7 +352,7 @@ window.MathJax = {
 
   <div class="prose">
     <p>The Earth absorbs sunlight across its disk, \(\pi r_E^2\), but radiates from its whole surface, \(4\pi r_E^2\). Balancing the two gives the Earth’s temperature:</p>
-    <div class="eq">\[ (1 - \text{albedo})\,(\text{solar constant})\,\pi r_E^2 = 4\pi r_E^2\,\sigma T^4 \quad\Longrightarrow\quad T = \left[\frac{(1-\text{albedo})\times 1370\ \mathrm{W/m^2}}{4\sigma}\right]^{1/4} \]</div>
+    <div class="eq multi"><span class="eqp">\( \displaystyle (1 - \text{albedo})\,(\text{solar constant})\,\pi r_E^2 = 4\pi r_E^2\,\sigma T^4 \)</span><span class="eqp">\( \displaystyle \Longrightarrow\; T = \left[\frac{(1-\text{albedo})\times 1370\ \mathrm{W/m^2}}{4\sigma}\right]^{1/4} \)</span></div>
     <p>Model the atmosphere as a single layer, transparent to visible light but opaque to infrared. In equilibrium the surface then receives twice as much energy as from sunlight alone, raising its temperature by \(2^{1/4}\): the greenhouse effect.</p>
   </div>
 
