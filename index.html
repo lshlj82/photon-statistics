@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blackbody Radiation, Interactively</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EDF1F4; --surface:#F8FAFC; --ink:#15202B; --muted:#56636F; --rule:#C5CFD7; --band:#E2E8ED;
+  --planck:#C0392B; --sun:#D49A12; --classic:#5D6B78; --cool:#2B67D1; --approx:#2E7A57; --res:#8B98A4;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E151C; --surface:#141D26; --ink:#E3E9EE; --muted:#97A4B0; --rule:#2B3743; --band:#1B2631;
+    --planck:#FF7A66; --sun:#F2C14E; --classic:#9AA8B5; --cool:#6E9FF2; --approx:#5CC593; --res:#5B6976;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E151C; --surface:#141D26; --ink:#E3E9EE; --muted:#97A4B0; --rule:#2B3743; --band:#1B2631;
+  --planck:#FF7A66; --sun:#F2C14E; --classic:#9AA8B5; --cool:#6E9FF2; --approx:#5CC593; --res:#5B6976;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:1.1rem;line-height:1.62;-webkit-font-smoothing:antialiased}
+img,canvas{max-width:100%}
+a{color:var(--cool)}
+:focus-visible{outline:2px solid var(--cool);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem)}
+.prose{max-width:40rem}
+
+header.hero{padding:clamp(2.5rem,7vw,5rem) 0 1.5rem}
+.credit{font-family:var(--sans);font-size:.9rem;color:var(--muted);margin:0 0 1.25rem}
+h1{font-weight:500;font-size:clamp(2.5rem,7.5vw,5.25rem);line-height:.98;letter-spacing:-.025em;margin:0 0 1.25rem;max-width:12ch}
+.lede{font-size:clamp(1.15rem,2.2vw,1.35rem);max-width:37rem;margin:0}
+
+section{padding:clamp(2.5rem,6vw,4rem) 0;border-top:1px solid var(--rule)}
+section:first-of-type{border-top:0;padding-top:1rem}
+h2{font-weight:500;font-size:clamp(1.7rem,3.5vw,2.35rem);line-height:1.1;letter-spacing:-.015em;margin:0 0 1rem}
+h3{font-family:var(--sans);font-weight:600;font-size:1rem;margin:1.75rem 0 .5rem}
+p{margin:0 0 1rem}
+.note{font-size:.95rem;color:var(--muted)}
+
+.eq{display:block;text-align:center;margin:1.25rem 0;overflow-x:auto;overflow-y:hidden;padding:.25rem 0}
+mjx-container{color:inherit}
+mjx-container[display="true"]{margin:0 !important}
+.stats mjx-container,.legend mjx-container,.cap mjx-container,.ctl small mjx-container{font-size:105%}
+.ctl output mjx-container{font-size:95%}
+.boxed{display:inline-block;border:1.5px solid var(--planck);padding:.5rem 1rem;border-radius:3px}
+
+.fig{display:grid;grid-template-columns:minmax(0,1fr) 17.5rem;gap:1.5rem;align-items:start;margin-top:1.5rem}
+@media (max-width:820px){.fig{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1rem}
+.canvas-holder{background:var(--surface);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+canvas{display:block;width:100%}
+
+.ctl{font-family:var(--sans);font-size:.9rem;margin-bottom:1.1rem}
+.ctl:last-child{margin-bottom:0}
+.ctl label{display:flex;justify-content:space-between;align-items:baseline;gap:.75rem;font-weight:500;margin-bottom:.3rem}
+.ctl .lt{flex:1 1 auto}
+.ctl output{flex:0 0 auto;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:400}
+.ctl small{display:block;color:var(--muted);line-height:1.4;margin-top:.25rem}
+input[type=range]{width:100%;accent-color:var(--planck);margin:0}
+.btns{display:flex;flex-wrap:wrap;gap:.5rem}
+button{font-family:var(--sans);font-size:.88rem;font-weight:500;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:4px;padding:.45rem .8rem;cursor:pointer}
+button:hover{border-color:var(--ink)}
+button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.check{display:flex;align-items:center;gap:.5rem;font-weight:500;cursor:pointer}
+.check input{width:1rem;height:1rem;margin:0;accent-color:var(--planck)}
+
+.stats{font-family:var(--sans);font-size:.9rem;display:grid;grid-template-columns:auto auto;gap:.35rem 1rem;margin:0}
+.stats dt{color:var(--muted)}
+.stats dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
+.stats .sep{grid-column:1/-1;border-top:1px solid var(--rule);margin:.3rem 0}
+.legend{font-family:var(--sans);font-size:.85rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:1rem;margin:.6rem 0 0}
+.swatch{display:inline-block;width:.75rem;height:.75rem;border-radius:2px;vertical-align:-1px;margin-right:.35rem}
+.swatch.line{height:3px;width:1.1rem;vertical-align:3px;border-radius:0}
+.swatch.dash{height:0;width:1.1rem;vertical-align:3px;border-radius:0;border-top:3px dashed}
+.cap{font-family:var(--sans);font-size:.85rem;color:var(--muted);margin:.5rem .25rem 0}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.25rem}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+
+.glow{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;font-family:var(--sans);font-size:.9rem}
+.glow .chip{width:3.25rem;height:3.25rem;border-radius:50%;border:1px solid var(--rule);flex:0 0 auto}
+.glow b{display:block;font-weight:600}
+.glow span{color:var(--muted)}
+.big{font-size:clamp(2.6rem,7vw,4.2rem);line-height:1;font-weight:500;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:.25rem 0}
+.verdict{font-family:var(--sans);font-size:1rem;font-weight:500;margin:.85rem 0 0;max-width:40rem}
+
+footer{border-top:1px solid var(--rule);padding:2rem 0 3rem;font-family:var(--sans);font-size:.9rem;color:var(--muted)}
+footer p{margin:0 0 .4rem}
+</style>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  options: { enableMenu: false }
+};
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <p class="credit">An interactive demo created by Claude Opus 5.5, based on the lecture notes by Sang Hoon Lee (Chapter 7, Section 7.4, Blackbody Radiation)</p>
+  <h1>Blackbody Radiation</h1>
+  <p class="lede">Treat the electromagnetic field inside a hot box as a gas of photons: bosons with zero chemical potential. Their statistics explain the color of glowing objects, Stefan’s \(T^4\) law, the cosmic background radiation, and the temperature of the Earth.</p>
+</header>
+
+<!-- ============ UV CATASTROPHE ============ -->
+<section id="uv" aria-labelledby="h-uv">
+  <h2 id="h-uv">The ultraviolet catastrophe</h2>
+  <div class="prose">
+    <p>Classically, the radiation inside a box is a combination of standing-wave patterns, each behaving as a harmonic oscillator with frequency \(f = c/\lambda\). Each oscillator has two quadratic degrees of freedom, so equipartition gives it an average energy \(\bar{E} = k_{\mathrm{B}}T\). But there are infinitely many modes, most of them at very short wavelengths, so the total thermal energy would be infinite. That cannot be physically true.</p>
+    <p>Planck’s solution: a quantum oscillator has energies \(E_n = 0, hf, 2hf, \ldots\) (dropping the zero-point energy, which only multiplies \(Z\) by a constant). The partition function of a single oscillator is a geometric series,</p>
+    <div class="eq">\[ Z = \sum_{n=0}^{\infty} e^{-n\beta hf} = \frac{1}{1 - e^{-\beta hf}}, \qquad \bar{E} = -\frac{\partial \ln Z}{\partial \beta} = \frac{hf}{e^{hf/k_{\mathrm{B}}T} - 1} \]</div>
+    <p>and the average number of energy units in the oscillator is the Planck distribution:</p>
+    <div class="eq"><span class="boxed">\( \displaystyle \bar{n}_{\mathrm{Pl}} = \frac{1}{e^{hf/k_{\mathrm{B}}T} - 1} \)</span></div>
+    <p>Modes with \(hf \gg k_{\mathrm{B}}T\) are exponentially suppressed, “frozen out,” and the catastrophe disappears. Slide the mode frequency to compare.</p>
+  </div>
+
+  <div class="ctl" style="max-width:32rem;margin-top:1.25rem">
+    <label for="xS"><span class="lt">Mode energy \(hf/k_{\mathrm{B}}T\)</span> <output id="xOut"></output></label>
+    <input type="range" id="xS" min="0.05" max="12" step="0.05" value="3">
+  </div>
+  <div class="two">
+    <div>
+      <div class="canvas-holder"><canvas id="modeCanvas" aria-label="Average energy per mode, classical versus Planck"></canvas></div>
+      <p class="cap">Average energy per mode, in units of \(k_{\mathrm{B}}T\).</p>
+    </div>
+    <div>
+      <div class="canvas-holder"><canvas id="rjCanvas" aria-label="Spectrum shape, Rayleigh-Jeans versus Planck"></canvas></div>
+      <p class="cap">Energy spectrum: the number of modes grows as \(\varepsilon^2\), so the classical spectrum grows without bound.</p>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="swatch dash" style="border-color:var(--classic)"></span>Classical (equipartition, Rayleigh–Jeans)</span>
+    <span><span class="swatch line" style="background:var(--planck)"></span>Planck</span>
+  </div>
+  <dl class="stats" style="max-width:32rem;margin-top:1rem">
+    <dt>\(\bar{n}_{\mathrm{Pl}}\) for this mode</dt><dd id="xN">–</dd>
+    <dt>Planck \(\bar{E}/k_{\mathrm{B}}T\)</dt><dd id="xE">–</dd>
+    <dt>Classical \(\bar{E}/k_{\mathrm{B}}T\)</dt><dd>1</dd>
+  </dl>
+</section>
+
+<!-- ============ PHOTONS ============ -->
+<section id="photons" aria-labelledby="h-photons">
+  <h2 id="h-photons">Photons as bosons</h2>
+  <div class="prose">
+    <p>Now take the units of field energy seriously as particles called photons. They are bosons and should follow the Bose–Einstein distribution with \(\varepsilon = hf\). Photons can be created or destroyed in any quantity, so their number is not conserved: \(N\) takes whatever value minimizes \(F\), which means \((\partial F/\partial N)_{T,V} = \mu = 0\). Then \(\bar{n}_{\mathrm{BE}}\) is exactly \(\bar{n}_{\mathrm{Pl}}\).</p>
+    <p>Photons are ultrarelativistic, \(\varepsilon = pc = hcn/2L\) with \(n = |\vec{n}|\), and come in two independent polarizations (playing the role of the electrons’ two spin states). Summing \(\varepsilon\,\bar{n}_{\mathrm{Pl}}\) over all modes in the eighth-sphere of \(n\)-space gives</p>
+    <div class="eq">\[ U = 2\sum_{n_x,n_y,n_z} \varepsilon\, \bar{n}_{\mathrm{Pl}}(\varepsilon) \approx \pi \int_0^\infty n^2\, dn\, \frac{hcn}{2L}\,\frac{1}{e^{hcn/2Lk_{\mathrm{B}}T} - 1} \quad\Longrightarrow\quad \frac{U}{V} = \int_0^\infty \frac{8\pi\varepsilon^3/(hc)^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1}\, d\varepsilon \]</div>
+    <p>The integrand is the spectrum: the energy density per unit photon energy,</p>
+    <div class="eq"><span class="boxed">\( \displaystyle u(\varepsilon) = \frac{8\pi}{(hc)^3}\,\frac{\varepsilon^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1} \)</span></div>
+    <p>With \(x = \varepsilon/k_{\mathrm{B}}T\) its shape is \(x^3/(e^x - 1)\), which peaks at \(x = 2.82\). Higher temperature means higher photon energies, larger frequency, and shorter wavelength: Wien’s law.</p>
+  </div>
+</section>
+
+<!-- ============ SPECTRUM ============ -->
+<section id="spectrum" aria-labelledby="h-spectrum">
+  <h2 id="h-spectrum">The spectrum at any temperature</h2>
+  <p class="prose">Choose a temperature. The curve is drawn relative to its own peak on a logarithmic axis, so it slides left as the temperature rises; pin a curve to compare. The colored band marks visible light.</p>
+
+  <div class="fig">
+    <div>
+      <div class="canvas-holder"><canvas id="specCanvas" aria-label="Blackbody spectrum on a logarithmic axis with the visible band marked"></canvas></div>
+      <div class="legend">
+        <span><span class="swatch line" style="background:var(--planck)"></span>Current temperature</span>
+        <span><span class="swatch line" style="background:var(--res)"></span>Pinned curves</span>
+        <span id="legLam"><span class="swatch dash" style="border-color:var(--cool)"></span>Where \(u(\varepsilon)\) peaks, converted to wavelength</span>
+        <span id="legEps" hidden><span class="swatch dash" style="border-color:var(--cool)"></span>Where \(u(\lambda)\) peaks, converted to energy</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="glow"><div class="chip" id="glowChip"></div><div><b id="glowTitle">–</b><span id="glowNote"></span></div></div>
+      <div class="ctl btns" role="group" aria-label="Examples" id="presetBtns"></div>
+      <div class="ctl">
+        <label for="tS"><span class="lt">Temperature \(T\)</span> <output id="tOut"></output></label>
+        <input type="range" id="tS" min="0.436" max="4.5" step="0.001" value="3.763">
+      </div>
+      <div class="ctl btns" role="group" aria-label="Spectrum variable">
+        <button type="button" data-view="lam" aria-pressed="true">Per wavelength</button>
+        <button type="button" data-view="eps">Per energy</button>
+      </div>
+      <div class="ctl btns">
+        <button type="button" id="pinBtn">Pin this curve</button>
+        <button type="button" id="clearPins">Clear pins</button>
+      </div>
+      <dl class="stats">
+        <dt>Peak of \(u(\lambda)\)</dt><dd id="sLam">–</dd>
+        <dt>Peak of \(u(\varepsilon)\)</dt><dd id="sEps">–</dd>
+        <dt>\(hc/\varepsilon_{\max}\)</dt><dd id="sLamE">–</dd>
+      </dl>
+    </div>
+  </div>
+
+  <h3>Per wavelength is not per energy</h3>
+  <div class="prose">
+    <p>Problem 7.39. Changing variables to \(\lambda = hc/\varepsilon\), with \(d\varepsilon = -hc\,d\lambda/\lambda^2\), gives the energy density per unit wavelength:</p>
+    <div class="eq">\[ u(\lambda) = \frac{8\pi hc}{\lambda^5}\,\frac{1}{e^{hc/\lambda k_{\mathrm{B}}T} - 1}, \qquad \lambda_{\max} = 0.2014\,\frac{hc}{k_{\mathrm{B}}T} \neq \frac{hc}{2.82\,k_{\mathrm{B}}T} = 0.3546\,\frac{hc}{k_{\mathrm{B}}T} \]</div>
+    <p>The two peaks disagree because \(\lambda \propto 1/\varepsilon\) is nonlinear: equal intervals \(d\varepsilon\) correspond to unequal intervals \(d\lambda \propto d\varepsilon/\varepsilon^2\). Compare the last two rows of the panel. For sunlight, \(u(\varepsilon)\) peaks at 1.41 eV, which corresponds to 880 nm in the near infrared, yet \(u(\lambda)\) peaks near 500 nm.</p>
+  </div>
+</section>
+
+<!-- ============ TOTALS ============ -->
+<section id="totals" aria-labelledby="h-totals">
+  <h2 id="h-totals">Totals: energy, photons, entropy, pressure</h2>
+  <div class="prose">
+    <p>Integrating the spectrum with \(\int_0^\infty x^3/(e^x-1)\,dx = \pi^4/15\) gives the total energy, and the rest follow:</p>
+    <div class="eq"><span class="boxed">\( \displaystyle \frac{U}{V} = \frac{8\pi^5 (k_{\mathrm{B}}T)^4}{15 (hc)^3} \propto T^4 \)</span></div>
+    <p>Doubling the temperature multiplies the energy by 16. Dimensional analysis already suggests this: each photon carries something of order \(k_{\mathrm{B}}T\), and the only relevant length is the photons’ typical wavelength \(hc/k_{\mathrm{B}}T\). The density of states (Problem 7.40) is \(g(\varepsilon) = 8\pi V\varepsilon^2/(hc)^3\).</p>
+    <div class="eq">\[ C_V = 4aT^3, \qquad S = \frac{32\pi^5}{45}\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 k_{\mathrm{B}}, \qquad N = 16\pi\,\zeta(3)\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 \]</div>
+    <p>with \(a = 8\pi^5 k_{\mathrm{B}}^4 V/15(hc)^3\) and \(\int_0^\infty x^2/(e^x-1)\,dx = 2\zeta(3) \approx 2.404\) (Problem 7.44). \(S\) and \(N\) share the same dependence on \(V(k_{\mathrm{B}}T/hc)^3\), so the entropy per photon is a constant, \(S/N \approx 3.6\,k_{\mathrm{B}}\). For the pressure (Problem 7.45) and free energy (Problem 7.46),</p>
+    <div class="eq">\[ P = -\left(\frac{\partial U}{\partial V}\right)_{S,N} = \frac13\,\frac{U}{V}, \qquad F = U - TS = -\frac13 U \]</div>
+    <p>and \(F\) can also be found mode by mode as \(-k_{\mathrm{B}}T\ln Z\), with the same result. Pick a temperature to see the numbers.</p>
+  </div>
+
+  <div class="two">
+    <div class="panel">
+      <div class="ctl btns" role="group" aria-label="Examples" id="presetBtns2"></div>
+      <div class="ctl">
+        <label for="tS2"><span class="lt">Temperature \(T\)</span> <output id="tOut2"></output></label>
+        <input type="range" id="tS2" min="0.436" max="7.5" step="0.001" value="3.176">
+      </div>
+      <p class="cap" style="margin:0">Shares nothing with the slider above, so you can compare two temperatures.</p>
+    </div>
+    <div class="panel">
+      <dl class="stats">
+        <dt>Energy density \(U/V\)</dt><dd id="qU">–</dd>
+        <dt>Photons per m³, \(N/V\)</dt><dd id="qN">–</dd>
+        <dt>Average photon energy \(U/N\)</dt><dd id="qE">–</dd>
+        <dt>Entropy per photon \(S/N\)</dt><dd>3.60 \(k_{\mathrm{B}}\)</dd>
+        <dt class="sep"></dt>
+        <dt>Radiation pressure \(P\)</dt><dd id="qP">–</dd>
+        <dt>Air at 1 atm, for scale</dt><dd>1.01 × 10<sup>5</sup> Pa</dd>
+        <dt>Power per area \(\sigma T^4\)</dt><dd id="qS">–</dd>
+      </dl>
+    </div>
+  </div>
+  <p class="prose note" style="margin-top:1.25rem">Problem 7.45 asks you to compare: radiation inside a 1500 K kiln exerts only about \(1.3 \times 10^{-3}\ \mathrm{Pa}\), a hundred-millionth of atmospheric pressure. At the center of the Sun, at 15 million K, radiation pressure reaches about \(1.3 \times 10^{13}\ \mathrm{Pa}\), yet the ionized hydrogen gas there (density about \(10^5\ \mathrm{kg/m^3}\)) exerts roughly \(2.5 \times 10^{16}\ \mathrm{Pa}\), about 2000 times more.</p>
+</section>
+
+<!-- ============ CMB ============ -->
+<section id="cmb" aria-labelledby="h-cmb">
+  <h2 id="h-cmb">The cosmic background radiation</h2>
+  <div class="prose">
+    <p>The radiation that fills the entire observable universe has an almost perfect thermal spectrum at 2.73 K. Its \(u(f)\) peaks at \(\varepsilon = 2.82\,k_{\mathrm{B}}T = 6.6 \times 10^{-4}\ \mathrm{eV}\), corresponding to a wavelength of about 1 mm, in the far infrared. There are about \(4.1 \times 10^8\) of these photons in every cubic meter of space. Part of the “snow” on an old analog television tuned between channels came from this leftover glow of the Big Bang. Choose <em>Cosmic background</em> in the spectrum above to see it.</p>
+  </div>
+</section>
+
+<!-- ============ HOLE / STEFAN ============ -->
+<section id="hole" aria-labelledby="h-hole">
+  <h2 id="h-hole">Photons escaping through a hole</h2>
+  <div class="prose">
+    <p>Open a small hole of area \(A\) in a box of radiation. All photons travel at the same speed \(c\), regardless of wavelength, so the light that escapes has the same spectrum as the light inside. To find how much escapes in a time \(dt\), consider a chunk of the box at distance \(R\) and angle \(\theta\) from the hole, inside a hemispherical shell of thickness \(c\,dt\). Only photons in that shell can reach the hole during \(dt\).</p>
+  </div>
+
+  <div class="fig">
+    <div>
+      <div class="canvas-holder"><canvas id="geoCanvas" aria-label="Cross-section of the box showing a chunk of the shell at angle theta and the hole's apparent area"></canvas></div>
+      <div class="legend">
+        <span><span class="swatch" style="background:var(--planck)"></span>The chunk, volume \(R^2\sin\theta\,d\theta\,d\phi\,c\,dt\)</span>
+        <span><span class="swatch line" style="background:var(--cool)"></span>The hole as seen from the chunk, \(A\cos\theta\)</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ctl">
+        <label for="thS"><span class="lt">Angle \(\theta\)</span> <output id="thOut"></output></label>
+        <input type="range" id="thS" min="0" max="89" step="1" value="35">
+      </div>
+      <dl class="stats">
+        <dt>Apparent hole area</dt><dd id="gA">–</dd>
+        <dt>Chunk volume \(\propto \sin\theta\)</dt><dd id="gV">–</dd>
+        <dt>Contribution \(\propto \sin\theta\cos\theta\)</dt><dd id="gP">–</dd>
+      </dl>
+      <p class="cap" style="margin:.75rem 0 0">Photons in the chunk point every which way, so the fraction aimed at the hole is its apparent area over the full sphere, \(A\cos\theta/4\pi R^2\). Head-on chunks see the whole hole but are small rings; grazing chunks are large but see the hole edge-on. The product peaks at 45°.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1.5rem">
+    <p>The chunk holds energy \((U/V)\,R^2\sin\theta\,d\theta\,d\phi\,c\,dt\), and a fraction \(A\cos\theta/4\pi R^2\) of it heads for the hole; \(R\) cancels. Integrating over \(\phi\) from 0 to \(2\pi\) and \(\theta\) from 0 to \(\pi/2\),</p>
+    <div class="eq">\[ \text{energy escaping} = \int_0^{2\pi}\! d\phi \int_0^{\pi/2}\! d\theta\, \frac{A\cos\theta}{4\pi}\,\frac{U}{V}\,c\,dt\,\sin\theta = \frac{A}{4}\,\frac{U}{V}\,c\,dt \]</div>
+    <p>The factor of \(\tfrac14\) is easy to check by brute force. Below, 2000 photons fly around a box at speed \(c\), bouncing off the walls; any that hit the hole escape. To keep the radiation inside in equilibrium, each is replaced by a photon entering through the hole, as if the hole opened onto more radiation at the same temperature. Compare the counted escape rate with \(\tfrac14 (N/V)\,c\,A\), and the escape angles with \(\sin\theta\cos\theta\).</p>
+  </div>
+
+  <div class="fig">
+    <div>
+      <div class="canvas-holder"><canvas id="boxCanvas" aria-label="Simulation of photons bouncing inside a box and escaping through a hole in the right wall"></canvas></div>
+      <div class="canvas-holder" style="margin-top:.75rem"><canvas id="histCanvas" aria-label="Histogram of the angles at which photons escape, compared with sin theta cos theta"></canvas></div>
+      <div class="legend">
+        <span><span class="swatch" style="background:var(--planck)"></span>Escaped photons, by angle from the hole’s normal</span>
+        <span><span class="swatch line" style="background:var(--ink)"></span>Prediction \(\propto \sin\theta\cos\theta\)</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="ctl btns">
+        <button type="button" id="simPlay">Pause</button>
+        <button type="button" id="simReset">Reset counts</button>
+      </div>
+      <div class="ctl">
+        <label for="simSpeed"><span class="lt">Simulation speed</span> <output id="simSpeedOut"></output></label>
+        <input type="range" id="simSpeed" min="0.25" max="4" step="0.25" value="1">
+      </div>
+      <dl class="stats" aria-live="off">
+        <dt>Photons \(N\)</dt><dd>2,000</dd>
+        <dt>Hole area \(A\)</dt><dd>\((0.3L)^2\)</dd>
+        <dt>Escapes</dt><dd id="simN">0</dd>
+        <dt class="sep"></dt>
+        <dt>Escape rate, measured</dt><dd id="simRate">–</dd>
+        <dt>\(\tfrac14 (N/V)\,c\,A\)</dt><dd id="simPred">–</dd>
+        <dt>Ratio</dt><dd id="simRatio">–</dd>
+      </dl>
+      <p class="cap" style="margin:.75rem 0 0">Rates are per unit of simulation time, with \(c = 0.45\) box lengths per unit. The view is from the front, so photons at all depths overlap; only 1 in 5 is drawn.</p>
+    </div>
+  </div>
+
+  <div class="prose" style="margin-top:1.5rem">
+    <div class="eq"><span class="boxed">\( \displaystyle \frac{\text{power}}{\text{area}} = \frac{c}{4}\frac{U}{V} = \frac{2\pi^5}{15}\frac{(k_{\mathrm{B}}T)^4}{h^3c^2} = \sigma T^4, \qquad \sigma = 5.67 \times 10^{-8}\ \mathrm{W\,m^{-2}\,K^{-4}} \)</span></div>
+    <p>This is Stefan’s law, discovered empirically in 1879 (remember “5–6–7–8”). Any nonreflecting (“black”) surface at the same temperature must emit the same power, and indeed the same entire spectrum, as the hole; otherwise placing it next to the hole, with a wavelength filter in between, would violate the second law. A surface that reflects some photons emits correspondingly less: power \(= \sigma e A T^4\), where \(e\) is the emissivity.</p>
+  </div>
+</section>
+
+<!-- ============ SUN AND EARTH ============ -->
+<section id="earth" aria-labelledby="h-earth">
+  <h2 id="h-earth">The Sun and the Earth</h2>
+  <div class="prose">
+    <p>The Earth receives 1370 W/m² of sunlight (the solar constant) at a distance of \(1.5 \times 10^{8}\ \mathrm{km}\), so the Sun’s total output is \(4\pi (1.5 \times 10^{11}\ \mathrm{m})^2 \times 1370\ \mathrm{W/m^2} \approx 3.9 \times 10^{26}\ \mathrm{W}\). Its radius is about \(7.0 \times 10^8\ \mathrm{m}\), so with emissivity 1, \(T_\odot = (L/\sigma A)^{1/4} \approx 5800\ \mathrm{K}\).</p>
+  </div>
+
+  <div class="canvas-holder" style="margin:1.5rem 0 .5rem"><canvas id="orbitCanvas" aria-label="The Earth orbiting the Sun, with the intercepted sunlight and a close-up of the Earth absorbing and radiating"></canvas></div>
+  <div class="legend" style="margin-bottom:1.5rem;align-items:center">
+    <span><span class="swatch" style="background:var(--sun)"></span>Sunlight, spreading over a sphere of area \(4\pi d^2\)</span>
+    <span><span class="swatch" style="background:var(--res)"></span>Infrared radiated by the Earth</span>
+    <span>Not to scale: the Sun and Earth are drawn far larger than life.</span>
+    <button type="button" id="orbitPlay" style="margin-left:auto">Pause orbit</button>
+  </div>
+
+  <div class="prose">
+    <p>The Earth absorbs sunlight across its disk, \(\pi r_E^2\), but radiates from its whole surface, \(4\pi r_E^2\). Balancing the two gives the Earth’s temperature:</p>
+    <div class="eq">\[ (1 - \text{albedo})\,(\text{solar constant})\,\pi r_E^2 = 4\pi r_E^2\,\sigma T^4 \quad\Longrightarrow\quad T = \left[\frac{(1-\text{albedo})\times 1370\ \mathrm{W/m^2}}{4\sigma}\right]^{1/4} \]</div>
+    <p>Model the atmosphere as a single layer, transparent to visible light but opaque to infrared. In equilibrium the surface then receives twice as much energy as from sunlight alone, raising its temperature by \(2^{1/4}\): the greenhouse effect.</p>
+  </div>
+
+  <div class="fig">
+    <div>
+      <div class="canvas-holder"><canvas id="earthCanvas" aria-label="Energy budget of the Earth's surface and atmosphere"></canvas></div>
+      <p class="cap">Energy flows averaged over the whole surface, in W/m². Sunlight (mostly visible) is drawn in gold, infrared in gray. Arrow widths are proportional to the flows.</p>
+    </div>
+    <div class="panel">
+      <div class="big" id="eT">–</div>
+      <p class="cap" id="eTc" style="margin:0 0 1rem"></p>
+      <div class="ctl btns">
+        <button type="button" id="eP1">Perfect blackbody</button>
+        <button type="button" id="eP2">30% reflected</button>
+        <button type="button" id="eP3">With greenhouse</button>
+      </div>
+      <div class="ctl">
+        <label for="eSun"><span class="lt">Sun’s surface \(T_\odot\)</span> <output id="eSunOut"></output></label>
+        <input type="range" id="eSun" min="3000" max="9000" step="10" value="5772">
+      </div>
+      <div class="ctl">
+        <label for="eD"><span class="lt">Distance from the Sun</span> <output id="eDOut"></output></label>
+        <input type="range" id="eD" min="0.3" max="2" step="0.01" value="1">
+        <small>In astronomical units (1 AU = \(1.5 \times 10^8\) km). Venus is at 0.72, Mars at 1.52.</small>
+      </div>
+      <div class="ctl">
+        <label for="eA"><span class="lt">Albedo (fraction reflected)</span> <output id="eAOut"></output></label>
+        <input type="range" id="eA" min="0" max="0.8" step="0.01" value="0">
+      </div>
+      <div class="ctl"><label class="check" for="eG"><input type="checkbox" id="eG"> Single-layer greenhouse atmosphere</label></div>
+      <dl class="stats">
+        <dt>Solar constant</dt><dd id="eS">–</dd>
+        <dt>Measured average surface</dt><dd>288 K (15 °C)</dd>
+      </dl>
+    </div>
+  </div>
+  <p class="prose note" style="margin-top:1.25rem">The single-layer model overshoots (303 K) because the real atmosphere isn’t one perfectly opaque layer. Most actual greenhouses work mainly by a different mechanism, limiting convective cooling. The default Sun temperature, 5772 K, reproduces the 1370 W/m² solar constant to within about 1%.</p>
+</section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Created by Claude Opus 5.5, based on the lecture notes by Sang Hoon Lee on quantum statistics (Section 7.4, Blackbody Radiation, with Problems 7.39, 7.40, 7.44, 7.45 and 7.46).</p>
+    <p>Constants: \(h = 6.626 \times 10^{-34}\ \mathrm{J\,s}\), \(k_{\mathrm{B}} = 1.381 \times 10^{-23}\ \mathrm{J/K}\), \(c = 2.998 \times 10^8\ \mathrm{m/s}\), \(\sigma = 5.670 \times 10^{-8}\ \mathrm{W\,m^{-2}\,K^{-4}}\). Colors use an analytic fit to the CIE 1931 color-matching functions (Wyman, Sloan and Shirley, 2013). Equations typeset with MathJax.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+let C = {};
+function readColors(){
+  const cs = getComputedStyle(document.documentElement);
+  ['bg','surface','ink','muted','rule','band','planck','sun','classic','cool','approx','res'].forEach(k => C[k] = cs.getPropertyValue('--'+k).trim());
+}
+readColors();
+const SANS = '"Instrument Sans", system-ui, sans-serif';
+const SERIF = '"Newsreader", Georgia, serif';
+function fit(cv, LW, LH){
+  const w = cv.parentElement.clientWidth || LW, hgt = w*LH/LW;
+  cv.style.height = hgt + 'px';
+  const d = window.devicePixelRatio || 1;
+  cv.width = Math.round(w*d); cv.height = Math.round(hgt*d);
+  const ctx = cv.getContext('2d'); const s = w*d/LW;
+  ctx.setTransform(s,0,0,s,0,0);
+  return ctx;
+}
+function rich(c, x, y, size, parts, align){
+  c.save(); c.textAlign = 'left';
+  const fontOf = st => st==='i' ? 'italic '+size+'px '+SERIF : st==='isub' ? 'italic '+(size*0.7)+'px '+SERIF : (st==='sub'||st==='sup') ? (size*0.7)+'px '+SERIF : st==='s' ? (size*0.88)+'px '+SANS : size+'px '+SERIF;
+  const widths = parts.map(([t,st]) => { c.font = fontOf(st); return c.measureText(t).width; });
+  const total = widths.reduce((a,b)=>a+b,0);
+  let cx = align==='center' ? x-total/2 : align==='right' ? x-total : x;
+  parts.forEach(([t,st],i) => { c.font = fontOf(st); const dy = (st==='sub'||st==='isub') ? size*0.25 : st==='sup' ? -size*0.38 : 0; c.fillText(t, cx, y+dy); cx += widths[i]; });
+  c.restore(); return total;
+}
+function sci(x, sig){
+  sig = sig || 2;
+  if (!isFinite(x)) return '–';
+  if (x === 0) return '0';
+  const e = Math.floor(Math.log10(Math.abs(x)));
+  if (e >= -2 && e < 5) return Number(x.toPrecision(sig)).toLocaleString('en-US',{maximumSignificantDigits:sig});
+  let m = (Math.abs(x)/Math.pow(10,e)).toFixed(sig-1), ee = e;
+  if (parseFloat(m) >= 10){ m = (parseFloat(m)/10).toFixed(sig-1); ee++; }
+  return (x<0?'−':'') + m + ' × 10<sup>' + (ee<0?'−'+(-ee):ee) + '</sup>';
+}
+const h = 6.62607015e-34, kB = 1.380649e-23, c0 = 2.99792458e8, eV = 1.602176634e-19;
+const SIGMA = 2*Math.pow(Math.PI,5)*Math.pow(kB,4)/(15*h*h*h*c0*c0);
+const ZETA3 = 1.2020569031595942;
+function lenStr(m){
+  const U=[[1e-12,'pm'],[1e-9,'nm'],[1e-6,'μm'],[1e-3,'mm'],[1,'m'],[1e3,'km']];
+  let u=U[0]; for (const v of U) if (m >= v[0]) u=v;
+  const v = m/u[0];
+  return (v>=100 ? Math.round(v).toLocaleString('en-US') : v>=10 ? v.toFixed(1) : v.toFixed(2)) + ' ' + u[1];
+}
+function enStr(e){ return e >= 0.1 ? e.toPrecision(3) + ' eV' : e >= 1e-3 ? (e*1000).toPrecision(3) + ' meV' : sci(e,2) + ' eV'; }
+function tStr(T){ return T < 10 ? T.toFixed(2) + ' K' : T < 1e5 ? Math.round(T).toLocaleString('en-US') + ' K' : sci(T,2) + ' K'; }
+
+/* ========== color science: CIE 1931 fit (Wyman, Sloan & Shirley 2013) ========== */
+const g = (l, mu, s1, s2) => { const t = (l-mu)/(l<mu ? s1 : s2); return Math.exp(-0.5*t*t); };
+const xbar = l => 1.056*g(l,599.8,37.9,31.0) + 0.362*g(l,442.0,16.0,26.7) - 0.065*g(l,501.1,20.4,26.2);
+const ybar = l => 0.821*g(l,568.8,46.9,40.5) + 0.286*g(l,530.9,16.3,31.1);
+const zbar = l => 1.217*g(l,437.0,11.8,36.0) + 0.681*g(l,459.0,26.0,13.8);
+function xyzToRgb(X,Y,Z){
+  let r = 3.2406*X - 1.5372*Y - 0.4986*Z, gg = -0.9689*X + 1.8758*Y + 0.0415*Z, b = 0.0557*X - 0.2040*Y + 1.0570*Z;
+  const mn = Math.min(r,gg,b); if (mn < 0){ r -= mn; gg -= mn; b -= mn; }
+  const mx = Math.max(r,gg,b) || 1; r/=mx; gg/=mx; b/=mx;
+  const gam = v => v <= 0.0031308 ? 12.92*v : 1.055*Math.pow(v,1/2.4) - 0.055;
+  return [gam(r), gam(gg), gam(b)];
+}
+const rgbStr = (a, k) => 'rgb(' + a.map(v => Math.round(255*Math.max(0,Math.min(1,v*(k===undefined?1:k))))).join(',') + ')';
+function wlColor(lnm){ const y = ybar(lnm); const rgb = xyzToRgb(xbar(lnm), y, zbar(lnm)); return rgbStr(rgb, Math.min(1, 0.25 + 1.1*Math.sqrt(Math.max(y,0)))); }
+function bbColor(T){
+  let X=0,Y=0,Z=0;
+  for (let l=380;l<=780;l+=5){ const lm = l*1e-9; const B = 1/(Math.pow(lm,5)*Math.expm1(h*c0/(lm*kB*T))); X += B*xbar(l); Y += B*ybar(l); Z += B*zbar(l); }
+  return xyzToRgb(X,Y,Z);
+}
+
+/* ================= MODES / UV ================= */
+let xP = 3;
+function modeRender(){
+  $('xOut').textContent = xP.toFixed(2);
+  const nb = 1/Math.expm1(xP);
+  $('xN').innerHTML = nb >= 1e-3 ? nb.toPrecision(3) : sci(nb,2);
+  $('xE').innerHTML = (xP*nb) >= 1e-3 ? (xP*nb).toPrecision(3) : sci(xP*nb,2);
+  const panel = (c, fP, fC, ymax, ylab, ticks) => {
+    if (!c) return;
+    const W=440,H=300,L=46,R=14,T=16,B=44, xmax=12;
+    c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
+    const X = x => L + x/xmax*(W-L-R), Y = v => H-B - v/ymax*(H-T-B);
+    c.font='12px '+SANS; c.fillStyle=C.muted; c.textAlign='center';
+    for (let x=0;x<=12;x+=2) c.fillText(x, X(x), H-B+16);
+    rich(c, W-R-2, H-8, 15, [['hf','i'],[' / ','r'],['k','i'],['B','sub'],['T','i']], 'right');
+    c.textAlign='right'; ticks.forEach(v => { c.strokeStyle=C.band; c.lineWidth=1; c.beginPath(); c.moveTo(L,Y(v)); c.lineTo(W-R,Y(v)); c.stroke(); c.fillText(v, L-6, Y(v)+4); });
+    c.fillStyle=C.muted; rich(c, L+6, T+12, 14, ylab, 'left');
+    c.save(); c.beginPath(); c.rect(L,T,W-L-R,H-T-B); c.clip();
+    // frozen-out shading for the region beyond the probe? no: show the classical excess
+    c.strokeStyle=C.classic; c.lineWidth=2.2; c.setLineDash([6,4]); c.beginPath();
+    for (let i=0;i<=300;i++){ const x=0.001+xmax*i/300; const y=Y(fC(x)); i?c.lineTo(X(x),y):c.moveTo(X(x),y); } c.stroke(); c.setLineDash([]);
+    c.fillStyle=C.planck; c.globalAlpha=0.15; c.beginPath(); c.moveTo(X(0),Y(0));
+    for (let i=0;i<=300;i++){ const x=0.001+xmax*i/300; c.lineTo(X(x),Y(fP(x))); } c.lineTo(X(xmax),Y(0)); c.closePath(); c.fill(); c.globalAlpha=1;
+    c.strokeStyle=C.planck; c.lineWidth=2.6; c.beginPath();
+    for (let i=0;i<=300;i++){ const x=0.001+xmax*i/300; const y=Y(fP(x)); i?c.lineTo(X(x),y):c.moveTo(X(x),y); } c.stroke();
+    c.strokeStyle=C.ink; c.globalAlpha=.5; c.lineWidth=1; c.beginPath(); c.moveTo(X(xP),T); c.lineTo(X(xP),H-B); c.stroke(); c.globalAlpha=1;
+    c.fillStyle=C.planck; c.beginPath(); c.arc(X(xP),Y(fP(xP)),5,0,7); c.fill();
+    const yc = fC(xP); if (yc <= ymax){ c.fillStyle=C.classic; c.beginPath(); c.arc(X(xP),Y(yc),4.5,0,7); c.fill(); }
+    c.restore();
+    c.strokeStyle=C.muted; c.lineWidth=1; c.beginPath(); c.moveTo(L,T); c.lineTo(L,H-B); c.lineTo(W-R,H-B); c.stroke();
+  };
+  panel(modeCtx, x => x/Math.expm1(x), x => 1, 1.25, [['Ē','i'],[' / ','r'],['k','i'],['B','sub'],['T','i']], [0,0.5,1]);
+  panel(rjCtx, x => x*x*x/Math.expm1(x), x => x*x, 4.5, [['x','i'],['3','sup'],['/(e','r'],['x','sup'],[' − 1)','r'],['   vs   ','s'],['x','i'],['2','sup']], [0,1,2,3,4]);
+  if (rjCtx){ rjCtx.fillStyle=C.planck; rjCtx.font='12px '+SANS; rjCtx.textAlign='left'; const W=440,L=46,R=14,T=16,H=300,B=44; const X=x=>L+x/12*(W-L-R), Y=v=>H-B-v/4.5*(H-T-B); rjCtx.fillText('peak at 2.82', X(2.82)-28, Y(1.42)-10); }
+}
+$('xS').addEventListener('input', e => { xP = +e.target.value; modeRender(); });
+
+/* ================= SPECTRUM ================= */
+const PRESETS = [
+  {k:'cmb', name:'Cosmic background', T:2.725},
+  {k:'room', name:'Room', T:300},
+  {k:'kiln', name:'Kiln', T:1500},
+  {k:'bulb', name:'Light bulb', T:2800},
+  {k:'sun', name:'Sun', T:5800},
+  {k:'star', name:'Hot star', T:20000}
+];
+const SP = {T:5800, view:'lam', pins:[]};
+const QT = {T:1500};
+function presetButtons(id, target, sliderId, render){
+  $(id).innerHTML = PRESETS.map(p => '<button type="button" data-p="'+p.k+'">'+p.name+'</button>').join('');
+  $(id).querySelectorAll('button').forEach(b => b.addEventListener('click', () => { const p = PRESETS.find(q=>q.k===b.dataset.p); target.T = p.T; $(sliderId).value = Math.log10(p.T).toFixed(3); render(); }));
+}
+function markPresets(id, T){ $(id).querySelectorAll('button[data-p]').forEach(b => { const p = PRESETS.find(q=>q.k===b.dataset.p); b.setAttribute('aria-pressed', String(Math.abs(Math.log10(p.T/T)) < 0.002)); }); }
+const LMIN = 30e-9, LMAX = 10e-3; // wavelength axis 30 nm .. 10 mm
+const EMIN = h*c0/LMAX/eV, EMAX = h*c0/LMIN/eV;
+function specRender(){
+  const T = SP.T;
+  $('tOut').textContent = tStr(T);
+  markPresets('presetBtns', T);
+  document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view===SP.view)));
+  const lamMax = 0.2014052*h*c0/(kB*T), epsMax = 2.8214394*kB*T/eV;
+  $('sLam').innerHTML = lenStr(lamMax);
+  $('sEps').innerHTML = enStr(epsMax);
+  $('sLamE').innerHTML = lenStr(h*c0/(epsMax*eV));
+  // glow
+  const chip = $('glowChip');
+  if (T < 798){ chip.style.background = '#000'; $('glowTitle').textContent = 'No visible glow'; $('glowNote').textContent = ' Too cold: nearly all of the radiation is infrared or longer.'; }
+  else {
+    const rgb = bbColor(T); const k = T < 1100 ? 0.25 + 0.75*(T-798)/300 : 1;
+    chip.style.background = rgbStr(rgb, k);
+    $('glowTitle').textContent = 'Color of the glow';
+    $('glowNote').textContent = T < 1100 ? ' Dim red, just becoming visible.' : T < 3500 ? ' Orange-white, like a filament.' : T < 7000 ? ' Nearly white, like sunlight.' : ' Bluish white.';
+  }
+  const c = specCtx; if (!c) return;
+  const W=640,H=400,L=20,R=16,T0=16,B=58;
+  c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
+  const lam = SP.view === 'lam';
+  const lo = Math.log10(lam ? LMIN : EMIN), hi = Math.log10(lam ? LMAX : EMAX);
+  const X = v => L + (Math.log10(v)-lo)/(hi-lo)*(W-L-R);
+  const Y = v => H-B - v*(H-T0-B)/1.12;
+  // visible band
+  const vis0 = 380, vis1 = 750;
+  for (let l=vis0; l<=vis1; l+=2){
+    const v = lam ? l*1e-9 : h*c0/(l*1e-9)/eV, v2 = lam ? (l+2)*1e-9 : h*c0/((l+2)*1e-9)/eV;
+    c.fillStyle = wlColor(l); c.globalAlpha = 0.12; const x1 = X(v), x2 = X(v2); c.fillRect(Math.min(x1,x2), T0, Math.abs(x2-x1)+0.6, H-T0-B); c.globalAlpha = 1;
+    c.fillRect(Math.min(x1,x2), H-B+1, Math.abs(x2-x1)+0.6, 7);
+  }
+  // ticks
+  c.font='12px '+SANS; c.fillStyle=C.muted; c.textAlign='center';
+  const lticks = [[1e-7,'100 nm'],[1e-6,'1 μm'],[1e-5,'10 μm'],[1e-4,'100 μm'],[1e-3,'1 mm'],[1e-2,'1 cm']];
+  const eticks = [[1e-3,'1 meV'],[1e-2,'10 meV'],[0.1,'0.1 eV'],[1,'1 eV'],[10,'10 eV']];
+  (lam ? lticks : eticks).forEach(([v,lab]) => { const x=X(v); if (x<L-1||x>W-R+1) return; c.strokeStyle=C.band; c.lineWidth=1; c.beginPath(); c.moveTo(x,T0); c.lineTo(x,H-B); c.stroke(); c.fillText(lab, x, H-B+24); });
+  c.fillStyle=C.muted;
+  rich(c, W-R-2, H-10, 15, lam ? [['wavelength ','s'],['λ','i'],['  (log scale)','s']] : [['photon energy ','s'],['ε','i'],['  (log scale)','s']], 'right');
+  rich(c, W-R-6, T0+14, 15, lam ? [['u','i'],['(','r'],['λ','i'],[')','r'],[', relative to its peak','s']] : [['u','i'],['(','r'],['ε','i'],[')','r'],[', relative to its peak','s']], 'right');
+  // curves
+  const shape = (v, TT) => lam ? 1/(Math.pow(v,5)*Math.expm1(h*c0/(v*kB*TT))) : Math.pow(v,3)/Math.expm1(v*eV/(kB*TT));
+  const peakV = TT => lam ? 0.2014052*h*c0/(kB*TT) : 2.8214394*kB*TT/eV;
+  const draw = (TT, col, w) => {
+    const pk = shape(peakV(TT), TT);
+    c.strokeStyle=col; c.lineWidth=w; c.beginPath(); let st=false;
+    for (let i=0;i<=700;i++){ const lv = lo + (hi-lo)*i/700, v = Math.pow(10,lv); let y = shape(v,TT)/pk; if (!isFinite(y)) y = 0; const py = Y(Math.max(0,y)); st ? c.lineTo(X(v),py) : (c.moveTo(X(v),py), st=true); }
+    c.stroke();
+    return peakV(TT);
+  };
+  c.save(); c.beginPath(); c.rect(L,T0,W-L-R,H-T0-B); c.clip();
+  const sortedPins = SP.pins.slice().sort((a,b)=>a-b);
+  sortedPins.forEach(TT => draw(TT, C.res, 1.6));
+  sortedPins.forEach((TT,i) => { const pv = lam ? 0.2014052*h*c0/(kB*TT) : 2.8214394*kB*TT/eV; c.fillStyle=C.surface; c.font='11px '+SANS; const lab=tStr(TT); const tw=c.measureText(lab).width; const y = Y(1) - 6 - (i%2)*14; c.globalAlpha=.85; c.fillRect(X(pv)-tw/2-3, y-10, tw+6, 13); c.globalAlpha=1; c.fillStyle=C.muted; c.textAlign='center'; c.fillText(lab, X(pv), y); });
+  const pv = draw(T, C.planck, 2.8);
+  c.fillStyle=C.planck; c.beginPath(); c.arc(X(pv), Y(1), 5, 0, 7); c.fill();
+  // other-variable peak marker
+  const other = lam ? h*c0/(epsMax*eV) : h*c0/lamMax/eV;
+  c.strokeStyle=C.cool; c.setLineDash([4,4]); c.lineWidth=1.4; c.beginPath(); c.moveTo(X(other),T0+20); c.lineTo(X(other),H-B); c.stroke(); c.setLineDash([]);
+  c.restore();
+  $('legLam').hidden = !lam; $('legEps').hidden = lam;
+}
+$('tS').addEventListener('input', e => { SP.T = Math.pow(10, +e.target.value); specRender(); });
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => { SP.view = b.dataset.view; specRender(); }));
+$('pinBtn').addEventListener('click', () => { if (!SP.pins.some(t => Math.abs(t/SP.T-1) < 0.01)) SP.pins.push(SP.T); if (SP.pins.length > 6) SP.pins.shift(); specRender(); });
+$('clearPins').addEventListener('click', () => { SP.pins = []; specRender(); });
+
+/* ================= TOTALS ================= */
+function totalsRender(){
+  const T = QT.T, kt = kB*T;
+  $('tOut2').textContent = tStr(T);
+  markPresets('presetBtns2', T);
+  const core = $('presetBtns2').querySelector('[data-core]'); if (core) core.setAttribute('aria-pressed', String(Math.abs(Math.log10(T/1.5e7)) < 0.002));
+  const uv = 8*Math.pow(Math.PI,5)*Math.pow(kt,4)/(15*Math.pow(h*c0,3));
+  const nv = 16*Math.PI*ZETA3*Math.pow(kt/(h*c0),3);
+  $('qU').innerHTML = sci(uv,2) + ' J/m<sup>3</sup>';
+  $('qN').innerHTML = sci(nv,2);
+  $('qE').innerHTML = enStr(uv/nv/eV) + ' = 2.70 <i>k</i><sub>B</sub><i>T</i>';
+  $('qP').innerHTML = sci(uv/3,2) + ' Pa';
+  $('qS').innerHTML = sci(SIGMA*Math.pow(T,4),2) + ' W/m<sup>2</sup>';
+}
+$('tS2').addEventListener('input', e => { QT.T = Math.pow(10, +e.target.value); totalsRender(); });
+
+/* ================= SUN AND EARTH ================= */
+const E = {Ts:5772, d:1, alb:0, gh:false};
+const RSUN = 6.96e8, AU = 1.496e11;
+function earthRender(){
+  if (typeof orbitDraw === 'function' && orbitCtx) orbitDraw();
+  const S = SIGMA*Math.pow(E.Ts,4)*Math.pow(RSUN/(E.d*AU),2);
+  const absorbed = S*(1-E.alb)/4;               // W/m^2 averaged
+  const Te = Math.pow(absorbed/SIGMA, 0.25);     // emission temperature
+  const Tg = E.gh ? Te*Math.pow(2,0.25) : Te;
+  $('eSunOut').textContent = Math.round(E.Ts).toLocaleString('en-US') + ' K';
+  $('eDOut').textContent = E.d.toFixed(2) + ' AU';
+  $('eAOut').textContent = Math.round(E.alb*100) + '%';
+  $('eG').checked = E.gh;
+  $('eS').textContent = Math.round(S).toLocaleString('en-US') + ' W/m²';
+  $('eT').textContent = Math.round(Tg) + ' K';
+  $('eTc').textContent = 'Surface temperature, ' + Math.round(Tg-273.15) + ' °C. ' + (Tg < 273 ? 'Below freezing.' : Tg > 373 ? 'Above boiling.' : '');
+  const c = earthCtx; if (!c) return;
+  const W=640,H=380;
+  c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
+  const scale = 0.055; // px per W/m^2
+  const ground = 320, atm = 150;
+  // ground
+  c.fillStyle=C.band; c.fillRect(0,ground,W,H-ground); c.fillStyle=C.muted; c.font='13px '+SANS; c.textAlign='right'; c.fillText('Ground  ' + Math.round(Tg) + ' K', W-14, ground+24);
+  if (E.gh){ c.fillStyle=C.rule; c.fillRect(0,atm-6,W,12); c.fillStyle=C.muted; c.fillText('Atmosphere  ' + Math.round(Te) + ' K', W-14, atm-14); }
+  const arrow = (x, y1, y2, flux, col, wavy) => {
+    const w = Math.max(2, flux*scale); const dir = Math.sign(y2-y1);
+    c.strokeStyle=col; c.fillStyle=col; c.lineWidth=w; c.lineCap='butt';
+    c.beginPath();
+    if (wavy){ const n=Math.abs(y2-y1); for (let t=0;t<=n-14;t+=2){ const yy=y1+dir*t; const xx=x+Math.sin(t/9)*(4+w*0.25); t?c.lineTo(xx,yy):c.moveTo(xx,yy);} }
+    else { c.moveTo(x,y1); c.lineTo(x,y2-dir*14); }
+    c.stroke();
+    c.beginPath(); c.moveTo(x-Math.max(8,w*0.9), y2-dir*16); c.lineTo(x+Math.max(8,w*0.9), y2-dir*16); c.lineTo(x, y2); c.closePath(); c.fill();
+    c.font='12px '+SANS; c.textAlign='left'; c.fillStyle=C.ink; c.fillText(Math.round(flux)+' W/m²', x+Math.max(12,w/2+10), (y1+y2)/2+4);
+  };
+  // sunlight in (visible light, gold); infrared in gray
+  c.fillStyle=rgbStr(bbColor(E.Ts)); c.strokeStyle=C.sun; c.lineWidth=2; c.beginPath(); c.arc(52,40,20,0,7); c.fill(); c.stroke();
+  c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('Sunlight, averaged over the globe (solar constant ÷ 4)', 82, 44);
+  arrow(70, 70, ground, S/4, C.sun, false);
+  if (E.alb > 0){ arrow(190, ground-4, 76, S/4*E.alb, C.sun, false); c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('reflected', 202, 96); }
+  const gEmit = SIGMA*Math.pow(Tg,4);
+  if (E.gh){
+    arrow(320, ground-2, atm+8, gEmit, C.res, true);
+    arrow(440, atm-8, 66, absorbed, C.res, true);
+    arrow(540, atm+8, ground-2, absorbed, C.res, true);
+    c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('infrared to space', 410, 58); c.fillText('back to the ground', 486, atm+30);
+  } else {
+    arrow(400, ground-2, 66, gEmit, C.res, true);
+    c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('infrared to space', 370, 58);
+  }
+}
+$('eSun').addEventListener('input', e => { E.Ts = +e.target.value; earthRender(); });
+$('eD').addEventListener('input', e => { E.d = +e.target.value; earthRender(); });
+$('eA').addEventListener('input', e => { E.alb = +e.target.value; earthRender(); });
+$('eG').addEventListener('change', e => { E.gh = e.target.checked; earthRender(); });
+const setE = o => { Object.assign(E, o); $('eSun').value=E.Ts; $('eD').value=E.d; $('eA').value=E.alb; earthRender(); };
+$('eP1').addEventListener('click', () => setE({Ts:5772, d:1, alb:0, gh:false}));
+$('eP2').addEventListener('click', () => setE({Ts:5772, d:1, alb:0.3, gh:false}));
+$('eP3').addEventListener('click', () => setE({Ts:5772, d:1, alb:0.3, gh:true}));
+
+
+/* ================= HOLE: GEOMETRY ================= */
+let thDeg = 35;
+function geoRender(){
+  const th = thDeg*Math.PI/180;
+  $('thOut').textContent = thDeg + '°';
+  $('gA').innerHTML = '<i>A</i> × ' + Math.cos(th).toFixed(2);
+  $('gV').textContent = Math.sin(th).toFixed(2);
+  $('gP').textContent = (Math.sin(th)*Math.cos(th)).toFixed(2) + ' (max 0.50)';
+  const c = geoCtx; if (!c) return;
+  const W=640,H=400;
+  c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
+  const bx0=40, by0=30, bx1=470, by1=370, hx=bx1, hy=(by0+by1)/2, ha=16;
+  // box walls with a gap for the hole
+  c.fillStyle=C.band; c.fillRect(bx0,by0,bx1-bx0,by1-by0);
+  c.strokeStyle=C.ink; c.lineWidth=4; c.lineCap='butt';
+  c.beginPath(); c.moveTo(bx1,hy-ha); c.lineTo(bx1,by0); c.lineTo(bx0,by0); c.lineTo(bx0,by1); c.lineTo(bx1,by1); c.lineTo(bx1,hy+ha); c.stroke();
+  const R = 200, cdt = 28;
+  c.save(); c.beginPath(); c.rect(bx0,by0,bx1-bx0,by1-by0); c.clip();
+  // shell (only the half inside the box)
+  c.fillStyle=C.planck; c.globalAlpha=0.12; c.beginPath(); c.arc(hx,hy,R+cdt,Math.PI/2,3*Math.PI/2); c.arc(hx,hy,R,3*Math.PI/2,Math.PI/2,true); c.closePath(); c.fill(); c.globalAlpha=1;
+  c.strokeStyle=C.planck; c.globalAlpha=.5; c.lineWidth=1; c.beginPath(); c.arc(hx,hy,R,Math.PI/2,3*Math.PI/2); c.stroke(); c.beginPath(); c.arc(hx,hy,R+cdt,Math.PI/2,3*Math.PI/2); c.stroke(); c.globalAlpha=1;
+  // the chunk at angle th (measured from the inward normal, pointing left), upper half
+  const dth = 7*Math.PI/180, a0 = Math.PI + th - dth/2, a1 = Math.PI + th + dth/2;
+  // canvas angles: Math.PI points left; increasing angle goes clockwise visually (y down) -> use negative to put chunk above
+  const A0 = Math.PI - th - dth/2, A1 = Math.PI - th + dth/2;
+  // the chunk (upper half) and, faintly, the rest of its ring around the normal (lower half in this cross-section)
+  c.fillStyle=C.planck; c.beginPath(); c.arc(hx,hy,R+cdt,-A1,-A0); c.arc(hx,hy,R,-A0,-A1,true); c.closePath(); c.fill();
+  c.globalAlpha=.35; c.beginPath(); c.arc(hx,hy,R+cdt,A0,A1); c.arc(hx,hy,R,A1,A0,true); c.closePath(); c.fill(); c.globalAlpha=1;
+  c.restore();
+  // chunk center and line to hole
+  const Rm = R + cdt/2, px = hx + Rm*Math.cos(Math.PI - th), py = hy + Rm*Math.sin(Math.PI - th) * -1;
+  const pyU = hy - Rm*Math.sin(th);
+  c.strokeStyle=C.ink; c.lineWidth=1.2; c.setLineDash([5,4]); c.beginPath(); c.moveTo(hx,hy); c.lineTo(hx-R-cdt-10,hy); c.stroke(); c.setLineDash([]);
+  c.strokeStyle=C.planck; c.lineWidth=1.6; c.beginPath(); c.moveTo(px,pyU); c.lineTo(hx,hy); c.stroke();
+  // photons in the chunk pointing in random directions (fixed seed), one aimed at the hole highlighted
+  let sd = 3; const rnd = () => { sd = (sd*16807)%2147483647; return sd/2147483647; };
+  c.strokeStyle=C.muted; c.lineWidth=1.2;
+  for (let k=0;k<7;k++){ const ang = rnd()*Math.PI*2, x0 = px + (rnd()-0.5)*14, y0 = pyU + (rnd()-0.5)*14; const x1 = x0+Math.cos(ang)*16, y1 = y0+Math.sin(ang)*16; c.beginPath(); c.moveTo(x0,y0); c.lineTo(x1,y1); c.stroke(); c.beginPath(); c.arc(x1,y1,1.8,0,7); c.fill(); }
+  // angle arc
+  c.strokeStyle=C.ink; c.lineWidth=1.2; c.beginPath(); c.arc(hx,hy,52,Math.PI,Math.PI+th); c.stroke();
+  c.fillStyle=C.ink; rich(c, hx-62*Math.cos(th/2)-10, hy-62*Math.sin(th/2)+5, 17, [['θ','i']], 'center');
+  // hole and its apparent (projected) size
+  c.strokeStyle=C.cool; c.lineWidth=4; c.beginPath(); c.moveTo(hx,hy-ha); c.lineTo(hx,hy+ha); c.stroke();
+  const ux = (hx-px), uy = (hy-pyU), ul = Math.hypot(ux,uy); const nx = -uy/ul, ny = ux/ul; // perpendicular to line of sight
+  const half = ha*Math.cos(th), ox = hx - ux/ul*26, oy = hy - uy/ul*26;
+  c.strokeStyle=C.cool; c.lineWidth=3; c.beginPath(); c.moveTo(ox-nx*half, oy-ny*half); c.lineTo(ox+nx*half, oy+ny*half); c.stroke();
+  c.lineWidth=1; c.setLineDash([2,3]); c.beginPath(); c.moveTo(ox-nx*half, oy-ny*half); c.lineTo(hx, hy-ha); c.moveTo(ox+nx*half, oy+ny*half); c.lineTo(hx, hy+ha); c.stroke(); c.setLineDash([]);
+  // labels
+  c.fillStyle=C.cool; rich(c, hx-10, hy+ha+18, 16, [['A','i']], 'right');
+  rich(c, hx-10, hy+ha+42, 14, [['A','i'],[' cos ','r'],['θ','i'],[': the hole','s']], 'right');
+  rich(c, hx-10, hy+ha+58, 14, [['as seen from the chunk','s']], 'right');
+  c.fillStyle=C.planck;
+  rich(c, (px+hx)/2 + 8, (pyU+hy)/2 - 6, 16, [['R','i']], 'left');
+  const la = th + 0.16, lx = hx - (R+cdt+14)*Math.cos(la), ly = hy - (R+cdt+14)*Math.sin(la);
+  c.fillStyle=C.ink; rich(c, Math.max(bx0+40, lx), Math.max(by0+18, ly), 15, [['c','i'],[' ','r'],['dt','i']], 'right');
+  c.fillStyle=C.muted; rich(c, bx0+12, by1-14, 14, [['Box of photons, cross-section','s']], 'left');
+  // escaping wiggles outside
+  c.strokeStyle=C.planck; c.lineWidth=1.6;
+  for (let k=0;k<3;k++){ const yy = hy - 10 + k*10, ang = (-25 + k*25)*Math.PI/180; c.beginPath(); for (let t=0;t<=48;t+=2){ const x = hx+10+t*Math.cos(ang) - Math.sin(ang)*Math.sin(t/4)*3, y = yy + t*Math.sin(ang) + Math.cos(ang)*Math.sin(t/4)*3; t?c.lineTo(x,y):c.moveTo(x,y); } c.stroke(); }
+}
+$('thS').addEventListener('input', e => { thDeg = +e.target.value; geoRender(); });
+
+/* ================= HOLE: SIMULATION ================= */
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SIM = {N:2000, c:0.45, a:0.3, speed:1, running:!reduceMotion, t:0, esc:0, bins:new Array(9).fill(0), ph:[], trails:[]};
+function newPhoton(p){
+  p = p || {};
+  p.x = Math.random(); p.y = Math.random(); p.z = Math.random();
+  const u = 2*Math.random()-1, phi = 2*Math.PI*Math.random(), s = Math.sqrt(1-u*u);
+  p.vx = SIM.c*s*Math.cos(phi); p.vy = SIM.c*s*Math.sin(phi); p.vz = SIM.c*u;
+  return p;
+}
+for (let i=0;i<SIM.N;i++) SIM.ph.push(newPhoton());
+function simReset(){ SIM.t = 0; SIM.esc = 0; SIM.bins.fill(0); }
+function simStep(dt){
+  const a0 = 0.5 - SIM.a/2, a1 = 0.5 + SIM.a/2;
+  for (const p of SIM.ph){
+    p.x += p.vx*dt; p.y += p.vy*dt; p.z += p.vz*dt;
+    if (p.x > 1){
+      // where did it cross x = 1?
+      const back = (p.x-1)/p.vx, yc = p.y - p.vy*back, zc = p.z - p.vz*back;
+      if (yc > a0 && yc < a1 && zc > a0 && zc < a1){
+        const th = Math.acos(Math.min(1, p.vx/SIM.c));
+        SIM.bins[Math.min(8, Math.floor(th/(Math.PI/18)))]++; SIM.esc++;
+        if (SIM.trails.length < 80) SIM.trails.push({x:1, y:yc, vx:p.vx, vy:p.vy, age:0});
+        // replacement photon enters through the hole, cosine-weighted (Lambert), as from a black surface at the same T
+        const r2 = Math.random(), cosT = Math.sqrt(1-r2), sinT = Math.sqrt(r2), ph2 = 2*Math.PI*Math.random();
+        p.vx = -SIM.c*cosT; p.vy = SIM.c*sinT*Math.cos(ph2); p.vz = SIM.c*sinT*Math.sin(ph2);
+        p.x = 1 + p.vx*back; p.y = yc + p.vy*back; p.z = zc + p.vz*back;  // travel for the rest of the step
+        continue;
+      }
+      p.x = 2 - p.x; p.vx = -p.vx;
+    }
+    if (p.x < 0){ p.x = -p.x; p.vx = -p.vx; }
+    if (p.y < 0){ p.y = -p.y; p.vy = -p.vy; } else if (p.y > 1){ p.y = 2 - p.y; p.vy = -p.vy; }
+    if (p.z < 0){ p.z = -p.z; p.vz = -p.vz; } else if (p.z > 1){ p.z = 2 - p.z; p.vz = -p.vz; }
+  }
+  SIM.trails.forEach(t => { t.x += t.vx*dt; t.y += t.vy*dt; t.age += dt; });
+  SIM.trails = SIM.trails.filter(t => t.age < 2.2);
+  SIM.t += dt;
+}
+function simStats(){
+  const pred = 0.25*SIM.N*SIM.c*SIM.a*SIM.a;
+  $('simN').textContent = SIM.esc.toLocaleString('en-US');
+  $('simPred').textContent = pred.toFixed(2);
+  if (SIM.t > 0.5){ const r = SIM.esc/SIM.t; $('simRate').textContent = r.toFixed(2); $('simRatio').textContent = (r/pred).toFixed(3) + (SIM.esc < 200 ? ' (still noisy)' : ''); }
+  else { $('simRate').textContent = '–'; $('simRatio').textContent = '–'; }
+  $('simSpeedOut').textContent = SIM.speed.toFixed(2) + '×';
+  $('simPlay').textContent = SIM.running ? 'Pause' : 'Play';
+}
+function boxDraw(){
+  const c = boxCtx; if (!c) return;
+  const W=640,H=330, S=280, x0=40, y0=(H-S)/2;
+  c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
+  const X = x => x0 + x*S, Y = y => y0 + (1-y)*S;
+  c.fillStyle=C.band; c.fillRect(x0,y0,S,S);
+  // hole on the right wall (front view shows its full square outline)
+  const hy0 = Y(0.5+SIM.a/2), hy1 = Y(0.5-SIM.a/2);
+  c.strokeStyle=C.ink; c.lineWidth=3;
+  c.beginPath(); c.moveTo(X(1),hy0); c.lineTo(X(1),y0); c.lineTo(x0,y0); c.lineTo(x0,y0+S); c.lineTo(X(1),y0+S); c.lineTo(X(1),hy1); c.stroke();
+  c.strokeStyle=C.cool; c.lineWidth=4; c.beginPath(); c.moveTo(X(1),hy0); c.lineTo(X(1),hy1); c.stroke();
+  c.fillStyle=C.planck;
+  for (let i=0;i<SIM.N;i+=5){ const p = SIM.ph[i]; c.globalAlpha = 0.35 + 0.5*p.z; c.beginPath(); c.arc(X(p.x),Y(p.y),2,0,7); c.fill(); }
+  c.globalAlpha = 1;
+  // escaped photons outside
+  SIM.trails.forEach(t => {
+    c.globalAlpha = Math.max(0, 1 - t.age/2.2);
+    c.strokeStyle=C.planck; c.lineWidth=2; c.beginPath(); c.moveTo(X(1), Y(t.y - t.vy*(t.x-1)/t.vx)); c.lineTo(X(t.x), Y(t.y)); c.stroke();
+    c.fillStyle=C.planck; c.beginPath(); c.arc(X(t.x), Y(t.y), 3, 0, 7); c.fill();
+  });
+  c.globalAlpha = 1;
+  c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left';
+  c.fillText('Box (front view)', x0, y0-8);
+  c.fillStyle=C.cool; c.textAlign='right'; c.fillText('Hole', X(1)-8, hy1+16); c.textAlign='left';
+  c.fillStyle=C.muted; c.fillText('Escaping light', X(1)+70, y0+14);
+}
+function histDraw(){
+  const c = histCtx; if (!c) return;
+  const W=640,H=210,L=44,R=16,T=16,B=40;
+  c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
+  const tot = SIM.bins.reduce((a,b)=>a+b,0);
+  const pred = SIM.bins.map((_,k) => { const t1=k*Math.PI/18, t2=(k+1)*Math.PI/18; return (Math.cos(2*t1)-Math.cos(2*t2))/2; });
+  const meas = SIM.bins.map(v => tot ? v/tot : 0);
+  const ymax = Math.max(0.2, ...meas, ...pred)*1.15;
+  const bw = (W-L-R)/9, Y = v => H-B - v/ymax*(H-T-B);
+  c.font='12px '+SANS; c.fillStyle=C.muted; c.textAlign='right';
+  [0,0.1,0.2].forEach(v => { c.strokeStyle=C.band; c.beginPath(); c.moveTo(L,Y(v)); c.lineTo(W-R,Y(v)); c.stroke(); c.fillText(v.toFixed(1), L-6, Y(v)+4); });
+  c.fillStyle=C.planck;
+  meas.forEach((v,k) => { const y=Y(v); c.fillRect(L+k*bw+bw*0.15, y, bw*0.7, H-B-y); });
+  c.strokeStyle=C.ink; c.lineWidth=2; c.beginPath();
+  pred.forEach((v,k) => { const x=L+k*bw+bw/2, y=Y(v); k?c.lineTo(x,y):c.moveTo(x,y); }); c.stroke();
+  c.fillStyle=C.ink; pred.forEach((v,k) => { c.beginPath(); c.arc(L+k*bw+bw/2, Y(v), 3, 0, 7); c.fill(); });
+  c.fillStyle=C.muted; c.textAlign='center';
+  for (let k=0;k<=9;k++) c.fillText((k*10)+'°', L+k*bw, H-B+16);
+  rich(c, W-R, H-6, 14, [['escape angle ','s'],['θ','i'],[' from the normal','s']], 'right');
+  rich(c, L+6, T+10, 13, [['fraction of escapes','s']], 'left');
+}
+let simLast = performance.now(), simVisible = true, statT = 0;
+function simLoop(now){
+  const dt = Math.min(0.05, (now - simLast)/1000); simLast = now;
+  if (SIM.running && simVisible && boxCtx){
+    const sub = Math.ceil(SIM.speed); for (let k=0;k<sub;k++) simStep(dt*SIM.speed/sub);
+    boxDraw(); statT += dt; if (statT > 0.25){ statT = 0; histDraw(); simStats(); }
+  }
+  requestAnimationFrame(simLoop);
+}
+$('simPlay').addEventListener('click', () => { SIM.running = !SIM.running; simLast = performance.now(); simStats(); });
+$('simReset').addEventListener('click', () => { simReset(); histDraw(); simStats(); });
+$('simSpeed').addEventListener('input', e => { SIM.speed = +e.target.value; simStats(); });
+
+
+/* ================= ORBIT DIAGRAM ================= */
+const ORB = {ang: 0.6, running: !matchMedia('(prefers-reduced-motion: reduce)').matches, visible: true, last: performance.now()};
+function haloText(c, txt, x, y, font, col){
+  c.font = font; const w = c.measureText(txt).width, al = c.textAlign;
+  const x0 = al==='center' ? x-w/2 : al==='right' ? x-w : x;
+  c.save(); c.globalAlpha = 0.82; c.fillStyle = C.surface; c.fillRect(x0-4, y-12, w+8, 16); c.restore();
+  c.fillStyle = col; c.fillText(txt, x, y);
+}
+function orbitDraw(){
+  const c = orbitCtx; if (!c) return;
+  const W=900, H=400;
+  c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
+  const cx = 318, cy = 212, k = 148, tilt = 0.44;          // px per AU, orbit ellipse squash
+  const S = SIGMA*Math.pow(E.Ts,4)*Math.pow(RSUN/(E.d*AU),2);
+  const Lsun = 4*Math.PI*RSUN*RSUN*SIGMA*Math.pow(E.Ts,4);
+  const absorbed = S*(1-E.alb)/4, Te = Math.pow(absorbed/SIGMA,0.25), Tg = E.gh ? Te*Math.pow(2,0.25) : Te;
+  // reference orbits
+  const ell = (a, col, w, dash, alpha) => { c.save(); c.globalAlpha=alpha; c.strokeStyle=col; c.lineWidth=w; c.setLineDash(dash); c.beginPath(); c.ellipse(cx, cy, a*k, a*k*tilt, 0, 0, 2*Math.PI); c.stroke(); c.restore(); };
+  ell(0.72, C.muted, 1, [3,5], 0.5); ell(1.52, C.muted, 1, [3,5], 0.5);
+  c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='center';
+  c.fillText('Venus’s orbit, 0.72 AU', cx, cy - 0.72*k*tilt - 6);
+  c.fillText('Mars’s orbit, 1.52 AU', cx, cy - 1.52*k*tilt - 6);
+  // Earth position
+  const ex = cx + E.d*k*Math.cos(ORB.ang), ey = cy + E.d*k*tilt*Math.sin(ORB.ang);
+  const behind = Math.sin(ORB.ang) < 0;   // far side of the Sun
+  const drawOrbit = () => ell(E.d, C.cool, 1.6, [], 0.75);
+  const drawSun = () => {
+    const rgb = bbColor(E.Ts), rs = 26 + (E.Ts-3000)/6000*10;
+    const gr = c.createRadialGradient(cx,cy,rs*0.6,cx,cy,rs*2.6);
+    const base = rgbStr(rgb, 1); gr.addColorStop(0, base); gr.addColorStop(1, base.replace('rgb(','rgba(').replace(')',',0)'));
+    c.save(); c.globalAlpha=0.45; c.fillStyle=gr; c.beginPath(); c.arc(cx,cy,rs*2.6,0,7); c.fill(); c.restore();
+    c.fillStyle=rgbStr(rgb); c.strokeStyle=C.sun; c.lineWidth=2; c.beginPath(); c.arc(cx,cy,rs,0,7); c.fill(); c.stroke();
+  };
+  const drawBeam = () => {
+    // sunlight intercepted by the Earth: a narrow wedge from the Sun to the Earth's disk
+    const dx = ex-cx, dy = ey-cy, dl = Math.hypot(dx,dy) || 1, nx = -dy/dl, ny = dx/dl, re = 9;
+    c.save(); c.globalAlpha = 0.35; c.fillStyle = C.sun;
+    c.beginPath(); c.moveTo(cx + nx*3, cy + ny*3); c.lineTo(ex + nx*re, ey + ny*re); c.lineTo(ex - nx*re, ey - ny*re); c.lineTo(cx - nx*3, cy - ny*3); c.closePath(); c.fill(); c.restore();
+  };
+  const drawEarth = () => {
+    const re = 9;
+    // night side
+    c.fillStyle = '#1F3A5F'; c.beginPath(); c.arc(ex,ey,re,0,7); c.fill();
+    // day side facing the Sun
+    const a = Math.atan2(cy-ey, cx-ex);
+    c.fillStyle = '#4C8FD9'; c.beginPath(); c.arc(ex,ey,re,a-Math.PI/2,a+Math.PI/2); c.closePath(); c.fill();
+    c.strokeStyle = C.ink; c.globalAlpha=.4; c.lineWidth=1; c.beginPath(); c.arc(ex,ey,re,0,7); c.stroke(); c.globalAlpha=1;
+    // label
+    c.fillStyle = C.ink; c.font = '600 13px '+SANS; c.textAlign = 'left';
+    const left = ex > 470 || ex < 60 && false; const side = ex > 470 ? -1 : 1;
+    c.textAlign = side > 0 ? 'left' : 'right';
+    const lx = ex + side*14, ly = ey + (Math.sin(ORB.ang) > 0 ? 22 : -18);
+    haloText(c, 'Earth  ' + Math.round(Tg) + ' K', lx, ly, '600 13px '+SANS, C.ink);
+    haloText(c, Math.round(S).toLocaleString('en-US') + ' W/m² arriving', lx, ly + 15, '12px '+SANS, C.muted);
+    c.textAlign = 'left';
+  };
+  // painter's order: things behind the Sun first
+  drawOrbit();
+  c.strokeStyle=C.muted; c.lineWidth=1; c.setLineDash([2,4]); c.beginPath(); c.moveTo(cx, cy); c.lineTo(ex, ey); c.stroke(); c.setLineDash([]);
+  if (behind){ drawBeam(); drawEarth(); drawSun(); }
+  else { drawSun(); drawBeam(); drawEarth(); }
+  // Sun label
+  c.textAlign='right';
+  haloText(c, 'Sun  ' + Math.round(E.Ts).toLocaleString('en-US') + ' K', cx - 44, cy - 2, '600 13px '+SANS, C.ink);
+  haloText(c, 'L = ' + (Lsun/1e26).toFixed(1) + ' × 10²⁶ W', cx - 44, cy + 14, '12px '+SANS, C.muted);
+  c.textAlign='left';
+  c.textAlign='left'; c.fillText('d = ' + E.d.toFixed(2) + ' AU = ' + (E.d*1.496).toFixed(2) + ' × 10⁸ km', 16, H - 16);
+
+  // ---- close-up inset: absorb over the disk, radiate over the sphere ----
+  const ix = 640, iy = 26, iw = 244, ih = 348;
+  c.fillStyle = C.bg; c.strokeStyle = C.rule; c.lineWidth = 1;
+  c.beginPath(); c.roundRect ? c.roundRect(ix, iy, iw, ih, 6) : c.rect(ix, iy, iw, ih); c.fill(); c.stroke();
+  c.fillStyle = C.ink; c.font = '600 13px '+SANS; c.textAlign = 'left'; c.fillText('Close-up of the Earth', ix + 14, iy + 22);
+  const ox = ix + 140, oy = iy + 170, rE = 46;
+  // parallel sunlight from the left, stopped by the disk
+  c.strokeStyle = C.sun; c.fillStyle = C.sun; c.lineWidth = 2;
+  for (let k2 = -2; k2 <= 2; k2++){
+    const yy = oy + k2*20, xEnd = ox - Math.sqrt(Math.max(0, rE*rE - (k2*20)*(k2*20)));
+    c.beginPath(); c.moveTo(ix + 12, yy); c.lineTo(xEnd - 6, yy); c.stroke();
+    c.beginPath(); c.moveTo(xEnd - 2, yy); c.lineTo(xEnd - 10, yy - 4); c.lineTo(xEnd - 10, yy + 4); c.closePath(); c.fill();
+  }
+  // infrared radiated in all directions
+  c.strokeStyle = C.res; c.lineWidth = 1.6;
+  for (let j = 0; j < 12; j++){
+    const a = j*Math.PI/6 + Math.PI/12;
+    c.beginPath();
+    for (let t = 0; t <= 26; t += 1.5){ const r = rE + 6 + t, wob = Math.sin(t/2.2)*3; const x = ox + r*Math.cos(a) - wob*Math.sin(a), y = oy + r*Math.sin(a) + wob*Math.cos(a); t ? c.lineTo(x,y) : c.moveTo(x,y); }
+    c.stroke();
+  }
+  // the Earth
+  const g2 = c.createLinearGradient(ox - rE, oy, ox + rE, oy); g2.addColorStop(0, '#4C8FD9'); g2.addColorStop(1, '#1F3A5F');
+  c.fillStyle = g2; c.beginPath(); c.arc(ox, oy, rE, 0, 7); c.fill();
+  // cross-section disk (seen edge-on as a line)
+  c.strokeStyle = C.sun; c.lineWidth = 3; c.beginPath(); c.moveTo(ox, oy - rE); c.lineTo(ox, oy + rE); c.stroke();
+  c.fillStyle = C.ink; c.font = '12px '+SANS; c.textAlign = 'left';
+  rich(c, ix + 14, iy + 52, 14, [['Absorbs sunlight over its disk, ','s'],['π','r'],['r','i'],['E','isub'],['2','sup']], 'left');
+  rich(c, ix + 14, iy + ih - 40, 14, [['Radiates over its surface, ','s'],['4π','r'],['r','i'],['E','isub'],['2','sup']], 'left');
+  c.fillStyle = C.muted;
+  rich(c, ix + 14, iy + ih - 18, 13, [['so the average input is ','s'],['S','i'],['/4 = ','r'],[Math.round(S/4) + ' W/m²','s']], 'left');
+}
+let orbitCtx;
+function orbitLoop(now){
+  const dt = Math.min(0.05, (now - ORB.last)/1000); ORB.last = now;
+  if (ORB.running && ORB.visible && orbitCtx){
+    // Kepler's third law for the animation: period proportional to d^(3/2), one year = 16 s
+    ORB.ang += dt * 2*Math.PI/(16*Math.pow(E.d, 1.5));
+    orbitDraw();
+  }
+  requestAnimationFrame(orbitLoop);
+}
+$('orbitPlay').addEventListener('click', () => { ORB.running = !ORB.running; ORB.last = performance.now(); $('orbitPlay').textContent = ORB.running ? 'Pause orbit' : 'Play orbit'; });
+
+/* ================= LAYOUT ================= */
+presetButtons('presetBtns', SP, 'tS', specRender);
+presetButtons('presetBtns2', QT, 'tS2', totalsRender);
+(function(){ const b = document.createElement('button'); b.type='button'; b.textContent='Sun’s core'; b.dataset.core='1';
+  b.addEventListener('click', () => { QT.T = 1.5e7; $('tS2').value = Math.log10(1.5e7).toFixed(3); totalsRender(); });
+  $('presetBtns2').appendChild(b); })();
+$('tS').value = Math.log10(SP.T).toFixed(3); $('tS2').value = Math.log10(QT.T).toFixed(3);
+let modeCtx, rjCtx, specCtx, earthCtx, geoCtx, boxCtx, histCtx;
+function layout(){
+  modeCtx = fit($('modeCanvas'), 440, 300);
+  rjCtx = fit($('rjCanvas'), 440, 300);
+  specCtx = fit($('specCanvas'), 640, 400);
+  earthCtx = fit($('earthCanvas'), 640, 380);
+  geoCtx = fit($('geoCanvas'), 640, 400);
+  orbitCtx = fit($('orbitCanvas'), 900, 400);
+  boxCtx = fit($('boxCanvas'), 640, 330);
+  histCtx = fit($('histCanvas'), 640, 210);
+  redrawAll();
+}
+function redrawAll(){ modeRender(); specRender(); totalsRender(); earthRender(); geoRender(); boxDraw(); histDraw(); simStats(); orbitDraw(); }
+let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 80); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); redrawAll(); });
+layout();
+new IntersectionObserver(es => { simVisible = es[0].isIntersecting; simLast = performance.now(); }).observe($('boxCanvas'));
+requestAnimationFrame(simLoop);
+new IntersectionObserver(es => { ORB.visible = es[0].isIntersecting; ORB.last = performance.now(); }).observe($('orbitCanvas'));
+$('orbitPlay').textContent = ORB.running ? 'Pause orbit' : 'Play orbit';
+requestAnimationFrame(orbitLoop);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+})();
+</script>
+</body>
+</html>
