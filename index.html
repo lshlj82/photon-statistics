@@ -2,6 +2,24 @@
 <html lang="en-US">
 <head>
 <meta charset="utf-8">
+<!-- lang-toggle:head -->
+<script>(function(){var l='en';try{if(localStorage.getItem('lshlj82-demo-lang')==='ko')l='ko'}catch(e){}window.LANG=l;document.documentElement.dataset.lang=l;window.tr=function(en,ko){return window.LANG==='ko'&&ko!=null?ko:en};})();</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+#langBtn{position:fixed;z-index:21;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(env(safe-area-inset-right,0px) + 60px);
+  min-width:40px;height:40px;padding:0 10px;border-radius:20px;display:grid;place-items:center;cursor:pointer;font:600 14px/1 system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  background:var(--lb-bg,rgba(255,255,255,.92));color:var(--lb-fg,#1d2633);border:1px solid var(--lb-bd,rgba(20,30,45,.18));box-shadow:0 1px 4px rgba(0,0,0,.12)}
+#langBtn:hover{border-color:currentColor}
+#langBtn:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
+:root[data-theme="dark"] #langBtn{--lb-bg:rgba(22,28,38,.92);--lb-fg:#e8eef6;--lb-bd:rgba(255,255,255,.18)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #langBtn{--lb-bg:rgba(22,28,38,.92);--lb-fg:#e8eef6;--lb-bd:rgba(255,255,255,.18)}}
+:root[data-lang="ko"] body{word-break:keep-all}
+:root[data-lang="ko"]{--sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;--serif:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;--ui-font:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+:root[data-lang="ko"] body{font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+
+@media print{#langBtn{display:none}}
+</style>
+<!-- lang-toggle:head-end -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Blackbody Radiation, Interactively</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,70 +145,70 @@ button.theme-btn svg{width:20px; height:20px; fill:none; stroke:currentColor; st
 <div class="wrap">
 
 <header class="hero">
-  <p class="credit">An interactive demo created by Claude Opus 5.5, based on the lecture notes by Sang Hoon Lee (Chapter 7, Section 7.4, Blackbody Radiation)</p>
-  <h1>Blackbody Radiation</h1>
-  <p class="lede">Treat the electromagnetic field inside a hot box as a gas of photons: bosons with zero chemical potential. Their statistics explain the color of glowing objects, Stefan’s \(T^4\) law, the cosmic background radiation, and the temperature of the Earth.</p>
+  <p class="credit" data-k="k1">An interactive demo created by Claude Opus 5.5, based on the lecture notes by Sang Hoon Lee (Chapter 7, Section 7.4, Blackbody Radiation)</p>
+  <h1 data-k="k2">Blackbody Radiation</h1>
+  <p class="lede" data-k="k3">Treat the electromagnetic field inside a hot box as a gas of photons: bosons with zero chemical potential. Their statistics explain the color of glowing objects, Stefan’s \(T^4\) law, the cosmic background radiation, and the temperature of the Earth.</p>
 </header>
 
 <!-- ============ UV CATASTROPHE ============ -->
 <section id="uv" aria-labelledby="h-uv">
-  <h2 id="h-uv">The ultraviolet catastrophe</h2>
+  <h2 id="h-uv" data-k="k4">The ultraviolet catastrophe</h2>
   <div class="prose">
-    <p>Classically, the radiation inside a box is a combination of standing-wave patterns, each behaving as a harmonic oscillator with frequency \(f = c/\lambda\). Each oscillator has two quadratic degrees of freedom, so equipartition gives it an average energy \(\bar{E} = k_{\mathrm{B}}T\). But there are infinitely many modes, most of them at very short wavelengths, so the total thermal energy would be infinite. That cannot be physically true.</p>
-    <p>Planck’s solution: a quantum oscillator has energies \(E_n = 0, hf, 2hf, \ldots\) (dropping the zero-point energy, which only multiplies \(Z\) by a constant). The partition function of a single oscillator is a geometric series,</p>
+    <p data-k="k5">Classically, the radiation inside a box is a combination of standing-wave patterns, each behaving as a harmonic oscillator with frequency \(f = c/\lambda\). Each oscillator has two quadratic degrees of freedom, so equipartition gives it an average energy \(\bar{E} = k_{\mathrm{B}}T\). But there are infinitely many modes, most of them at very short wavelengths, so the total thermal energy would be infinite. That cannot be physically true.</p>
+    <p data-k="k6">Planck’s solution: a quantum oscillator has energies \(E_n = 0, hf, 2hf, \ldots\) (dropping the zero-point energy, which only multiplies \(Z\) by a constant). The partition function of a single oscillator is a geometric series,</p>
     <div class="eq multi"><span class="eqp">\( \displaystyle Z = \sum_{n=0}^{\infty} e^{-n\beta hf} = \frac{1}{1 - e^{-\beta hf}}, \)</span><span class="eqp">\( \displaystyle \bar{E} = -\frac{\partial \ln Z}{\partial \beta} = \frac{hf}{e^{hf/k_{\mathrm{B}}T} - 1} \)</span></div>
-    <p>and the average number of energy units in the oscillator is the Planck distribution:</p>
+    <p data-k="k7">and the average number of energy units in the oscillator is the Planck distribution:</p>
     <div class="eq"><span class="boxed">\( \displaystyle \bar{n}_{\mathrm{Pl}} = \frac{1}{e^{hf/k_{\mathrm{B}}T} - 1} \)</span></div>
-    <p>Modes with \(hf \gg k_{\mathrm{B}}T\) are exponentially suppressed, “frozen out,” and the catastrophe disappears. Slide the mode frequency to compare.</p>
+    <p data-k="k8">Modes with \(hf \gg k_{\mathrm{B}}T\) are exponentially suppressed, “frozen out,” and the catastrophe disappears. Slide the mode frequency to compare.</p>
   </div>
 
   <div class="ctl" style="max-width:32rem;margin-top:1.25rem">
-    <label for="xS"><span class="lt">Mode energy \(hf/k_{\mathrm{B}}T\)</span> <output id="xOut"></output></label>
+    <label for="xS"><span data-k="k9"><span class="lt">Mode energy \(hf/k_{\mathrm{B}}T\)</span></span> <output id="xOut"></output></label>
     <input type="range" id="xS" min="0.05" max="12" step="0.05" value="3">
   </div>
   <div class="two">
     <div>
       <div class="canvas-holder"><canvas id="modeCanvas" aria-label="Average energy per mode, classical versus Planck"></canvas></div>
-      <p class="cap">Average energy per mode, in units of \(k_{\mathrm{B}}T\).</p>
+      <p class="cap" data-k="k10">Average energy per mode, in units of \(k_{\mathrm{B}}T\).</p>
     </div>
     <div>
       <div class="canvas-holder"><canvas id="rjCanvas" aria-label="Spectrum shape, Rayleigh-Jeans versus Planck"></canvas></div>
-      <p class="cap">Energy spectrum: the number of modes grows as \(\varepsilon^2\), so the classical spectrum grows without bound.</p>
+      <p class="cap" data-k="k11">Energy spectrum: the number of modes grows as \(\varepsilon^2\), so the classical spectrum grows without bound.</p>
     </div>
   </div>
-  <div class="legend">
+  <div class="legend" data-k="k12">
     <span><span class="swatch dash" style="border-color:var(--classic)"></span>Classical (equipartition, Rayleigh–Jeans)</span>
     <span><span class="swatch line" style="background:var(--planck)"></span>Planck</span>
   </div>
   <dl class="stats" style="max-width:32rem;margin-top:1rem">
-    <dt>\(\bar{n}_{\mathrm{Pl}}\) for this mode</dt><dd id="xN">–</dd>
-    <dt>Planck \(\bar{E}/k_{\mathrm{B}}T\)</dt><dd id="xE">–</dd>
-    <dt>Classical \(\bar{E}/k_{\mathrm{B}}T\)</dt><dd>1</dd>
+    <dt data-k="k13">\(\bar{n}_{\mathrm{Pl}}\) for this mode</dt><dd id="xN">–</dd>
+    <dt data-k="k14">Planck \(\bar{E}/k_{\mathrm{B}}T\)</dt><dd id="xE">–</dd>
+    <dt data-k="k15">Classical \(\bar{E}/k_{\mathrm{B}}T\)</dt><dd>1</dd>
   </dl>
 </section>
 
 <!-- ============ PHOTONS ============ -->
 <section id="photons" aria-labelledby="h-photons">
-  <h2 id="h-photons">Photons as bosons</h2>
+  <h2 id="h-photons" data-k="k16">Photons as bosons</h2>
   <div class="prose">
-    <p>Now take the units of field energy seriously as particles called photons. They are bosons and should follow the Bose–Einstein distribution with \(\varepsilon = hf\). Photons can be created or destroyed in any quantity, so their number is not conserved: \(N\) takes whatever value minimizes \(F\), which means \((\partial F/\partial N)_{T,V} = \mu = 0\). Then \(\bar{n}_{\mathrm{BE}}\) is exactly \(\bar{n}_{\mathrm{Pl}}\).</p>
-    <p>Photons are ultrarelativistic, \(\varepsilon = pc = hcn/2L\) with \(n = |\vec{n}|\), and come in two independent polarizations (playing the role of the electrons’ two spin states). Summing \(\varepsilon\,\bar{n}_{\mathrm{Pl}}\) over all modes in the eighth-sphere of \(n\)-space gives</p>
+    <p data-k="k17">Now take the units of field energy seriously as particles called photons. They are bosons and should follow the Bose–Einstein distribution with \(\varepsilon = hf\). Photons can be created or destroyed in any quantity, so their number is not conserved: \(N\) takes whatever value minimizes \(F\), which means \((\partial F/\partial N)_{T,V} = \mu = 0\). Then \(\bar{n}_{\mathrm{BE}}\) is exactly \(\bar{n}_{\mathrm{Pl}}\).</p>
+    <p data-k="k18">Photons are ultrarelativistic, \(\varepsilon = pc = hcn/2L\) with \(n = |\vec{n}|\), and come in two independent polarizations (playing the role of the electrons’ two spin states). Summing \(\varepsilon\,\bar{n}_{\mathrm{Pl}}\) over all modes in the eighth-sphere of \(n\)-space gives</p>
     <div class="eq multi"><span class="eqp">\( \displaystyle U = 2\sum_{n_x,n_y,n_z} \varepsilon\, \bar{n}_{\mathrm{Pl}}(\varepsilon) \)</span><span class="eqp cont">\( \displaystyle \approx \pi \int_0^\infty n^2\, dn\, \frac{hcn}{2L}\,\frac{1}{e^{hcn/2Lk_{\mathrm{B}}T} - 1} \)</span><span class="eqp">\( \displaystyle \Longrightarrow\; \frac{U}{V} = \int_0^\infty \frac{8\pi\varepsilon^3/(hc)^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1}\, d\varepsilon \)</span></div>
-    <p>The integrand is the spectrum: the energy density per unit photon energy,</p>
+    <p data-k="k19">The integrand is the spectrum: the energy density per unit photon energy,</p>
     <div class="eq"><span class="boxed">\( \displaystyle u(\varepsilon) = \frac{8\pi}{(hc)^3}\,\frac{\varepsilon^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1} \)</span></div>
-    <p>With \(x = \varepsilon/k_{\mathrm{B}}T\) its shape is \(x^3/(e^x - 1)\), which peaks at \(x = 2.82\). Higher temperature means higher photon energies, larger frequency, and shorter wavelength: Wien’s law.</p>
+    <p data-k="k20">With \(x = \varepsilon/k_{\mathrm{B}}T\) its shape is \(x^3/(e^x - 1)\), which peaks at \(x = 2.82\). Higher temperature means higher photon energies, larger frequency, and shorter wavelength: Wien’s law.</p>
   </div>
 </section>
 
 <!-- ============ SPECTRUM ============ -->
 <section id="spectrum" aria-labelledby="h-spectrum">
-  <h2 id="h-spectrum">The spectrum at any temperature</h2>
-  <p class="prose">Choose a temperature. The curve is drawn relative to its own peak on a logarithmic axis, so it slides left as the temperature rises; pin a curve to compare. The colored band marks visible light.</p>
+  <h2 id="h-spectrum" data-k="k21">The spectrum at any temperature</h2>
+  <p class="prose" data-k="k22">Choose a temperature. The curve is drawn relative to its own peak on a logarithmic axis, so it slides left as the temperature rises; pin a curve to compare. The colored band marks visible light.</p>
 
   <div class="fig">
     <div>
       <div class="canvas-holder"><canvas id="specCanvas" aria-label="Blackbody spectrum on a logarithmic axis with the visible band marked"></canvas></div>
-      <div class="legend">
+      <div class="legend" data-k="k23">
         <span><span class="swatch line" style="background:var(--planck)"></span>Current temperature</span>
         <span><span class="swatch line" style="background:var(--res)"></span>Pinned curves</span>
         <span id="legLam"><span class="swatch dash" style="border-color:var(--cool)"></span>Where \(u(\varepsilon)\) peaks, converted to wavelength</span>
@@ -201,119 +219,119 @@ button.theme-btn svg{width:20px; height:20px; fill:none; stroke:currentColor; st
       <div class="glow"><div class="chip" id="glowChip"></div><div><b id="glowTitle">–</b><span id="glowNote"></span></div></div>
       <div class="ctl btns" role="group" aria-label="Examples" id="presetBtns"></div>
       <div class="ctl">
-        <label for="tS"><span class="lt">Temperature \(T\)</span> <output id="tOut"></output></label>
+        <label for="tS"><span data-k="k24"><span class="lt">Temperature \(T\)</span></span> <output id="tOut"></output></label>
         <input type="range" id="tS" min="0.436" max="4.5" step="0.001" value="3.763">
       </div>
       <div class="ctl btns" role="group" aria-label="Spectrum variable">
-        <button type="button" data-view="lam" aria-pressed="true">Per wavelength</button>
-        <button type="button" data-view="eps">Per energy</button>
+        <button type="button" data-view="lam" aria-pressed="true" data-k="k25">Per wavelength</button>
+        <button type="button" data-view="eps" data-k="k26">Per energy</button>
       </div>
       <div class="ctl btns">
-        <button type="button" id="pinBtn">Pin this curve</button>
-        <button type="button" id="clearPins">Clear pins</button>
+        <button type="button" id="pinBtn" data-k="k27">Pin this curve</button>
+        <button type="button" id="clearPins" data-k="k28">Clear pins</button>
       </div>
       <dl class="stats">
-        <dt>Peak of \(u(\lambda)\)</dt><dd id="sLam">–</dd>
-        <dt>Peak of \(u(\varepsilon)\)</dt><dd id="sEps">–</dd>
+        <dt data-k="k29">Peak of \(u(\lambda)\)</dt><dd id="sLam">–</dd>
+        <dt data-k="k30">Peak of \(u(\varepsilon)\)</dt><dd id="sEps">–</dd>
         <dt>\(hc/\varepsilon_{\max}\)</dt><dd id="sLamE">–</dd>
       </dl>
     </div>
   </div>
 
-  <h3>Per wavelength is not per energy</h3>
+  <h3 data-k="k31">Per wavelength is not per energy</h3>
   <div class="prose">
-    <p>Problem 7.39. Changing variables to \(\lambda = hc/\varepsilon\), with \(d\varepsilon = -hc\,d\lambda/\lambda^2\), gives the energy density per unit wavelength:</p>
+    <p data-k="k32">Problem 7.39. Changing variables to \(\lambda = hc/\varepsilon\), with \(d\varepsilon = -hc\,d\lambda/\lambda^2\), gives the energy density per unit wavelength:</p>
     <div class="eq multi"><span class="eqp">\( \displaystyle u(\lambda) = \frac{8\pi hc}{\lambda^5}\,\frac{1}{e^{hc/\lambda k_{\mathrm{B}}T} - 1}, \)</span><span class="eqp">\( \displaystyle \lambda_{\max} = 0.2014\,\frac{hc}{k_{\mathrm{B}}T} \)</span><span class="eqp cont">\( \displaystyle \neq \frac{hc}{2.82\,k_{\mathrm{B}}T} = 0.3546\,\frac{hc}{k_{\mathrm{B}}T} \)</span></div>
-    <p>The two peaks disagree because \(\lambda \propto 1/\varepsilon\) is nonlinear: equal intervals \(d\varepsilon\) correspond to unequal intervals \(d\lambda \propto d\varepsilon/\varepsilon^2\). Compare the last two rows of the panel. For sunlight, \(u(\varepsilon)\) peaks at 1.41 eV, which corresponds to 880 nm in the near infrared, yet \(u(\lambda)\) peaks near 500 nm.</p>
+    <p data-k="k33">The two peaks disagree because \(\lambda \propto 1/\varepsilon\) is nonlinear: equal intervals \(d\varepsilon\) correspond to unequal intervals \(d\lambda \propto d\varepsilon/\varepsilon^2\). Compare the last two rows of the panel. For sunlight, \(u(\varepsilon)\) peaks at 1.41 eV, which corresponds to 880 nm in the near infrared, yet \(u(\lambda)\) peaks near 500 nm.</p>
   </div>
 </section>
 
 <!-- ============ TOTALS ============ -->
 <section id="totals" aria-labelledby="h-totals">
-  <h2 id="h-totals">Totals: energy, photons, entropy, pressure</h2>
+  <h2 id="h-totals" data-k="k34">Totals: energy, photons, entropy, pressure</h2>
   <div class="prose">
-    <p>Integrating the spectrum with \(\int_0^\infty x^3/(e^x-1)\,dx = \pi^4/15\) gives the total energy, and the rest follow:</p>
+    <p data-k="k35">Integrating the spectrum with \(\int_0^\infty x^3/(e^x-1)\,dx = \pi^4/15\) gives the total energy, and the rest follow:</p>
     <div class="eq"><span class="boxed">\( \displaystyle \frac{U}{V} = \frac{8\pi^5 (k_{\mathrm{B}}T)^4}{15 (hc)^3} \propto T^4 \)</span></div>
-    <p>Doubling the temperature multiplies the energy by 16. Dimensional analysis already suggests this: each photon carries something of order \(k_{\mathrm{B}}T\), and the only relevant length is the photons’ typical wavelength \(hc/k_{\mathrm{B}}T\). The density of states (Problem 7.40) is \(g(\varepsilon) = 8\pi V\varepsilon^2/(hc)^3\).</p>
+    <p data-k="k36">Doubling the temperature multiplies the energy by 16. Dimensional analysis already suggests this: each photon carries something of order \(k_{\mathrm{B}}T\), and the only relevant length is the photons’ typical wavelength \(hc/k_{\mathrm{B}}T\). The density of states (Problem 7.40) is \(g(\varepsilon) = 8\pi V\varepsilon^2/(hc)^3\).</p>
     <div class="eq multi"><span class="eqp">\( \displaystyle C_V = 4aT^3, \)</span><span class="eqp">\( \displaystyle S = \frac{32\pi^5}{45}\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 k_{\mathrm{B}}, \)</span><span class="eqp">\( \displaystyle N = 16\pi\,\zeta(3)\,V\left(\frac{k_{\mathrm{B}}T}{hc}\right)^3 \)</span></div>
-    <p>with \(a = 8\pi^5 k_{\mathrm{B}}^4 V/15(hc)^3\) and \(\int_0^\infty x^2/(e^x-1)\,dx = 2\zeta(3) \approx 2.404\) (Problem 7.44). \(S\) and \(N\) share the same dependence on \(V(k_{\mathrm{B}}T/hc)^3\), so the entropy per photon is a constant, \(S/N \approx 3.6\,k_{\mathrm{B}}\). For the pressure (Problem 7.45) and free energy (Problem 7.46),</p>
+    <p data-k="k37">with \(a = 8\pi^5 k_{\mathrm{B}}^4 V/15(hc)^3\) and \(\int_0^\infty x^2/(e^x-1)\,dx = 2\zeta(3) \approx 2.404\) (Problem 7.44). \(S\) and \(N\) share the same dependence on \(V(k_{\mathrm{B}}T/hc)^3\), so the entropy per photon is a constant, \(S/N \approx 3.6\,k_{\mathrm{B}}\). For the pressure (Problem 7.45) and free energy (Problem 7.46),</p>
     <div class="eq multi"><span class="eqp">\( \displaystyle P = -\left(\frac{\partial U}{\partial V}\right)_{S,N} = \frac13\,\frac{U}{V}, \)</span><span class="eqp">\( \displaystyle F = U - TS = -\frac13 U \)</span></div>
-    <p>and \(F\) can also be found mode by mode as \(-k_{\mathrm{B}}T\ln Z\), with the same result. Pick a temperature to see the numbers.</p>
+    <p data-k="k38">and \(F\) can also be found mode by mode as \(-k_{\mathrm{B}}T\ln Z\), with the same result. Pick a temperature to see the numbers.</p>
   </div>
 
   <div class="two">
     <div class="panel">
       <div class="ctl btns" role="group" aria-label="Examples" id="presetBtns2"></div>
       <div class="ctl">
-        <label for="tS2"><span class="lt">Temperature \(T\)</span> <output id="tOut2"></output></label>
+        <label for="tS2"><span data-k="k39"><span class="lt">Temperature \(T\)</span></span> <output id="tOut2"></output></label>
         <input type="range" id="tS2" min="0.436" max="7.5" step="0.001" value="3.176">
       </div>
-      <p class="cap" style="margin:0">Shares nothing with the slider above, so you can compare two temperatures.</p>
+      <p class="cap" style="margin:0" data-k="k40">Shares nothing with the slider above, so you can compare two temperatures.</p>
     </div>
     <div class="panel">
       <dl class="stats">
-        <dt>Energy density \(U/V\)</dt><dd id="qU">–</dd>
-        <dt>Photons per m³, \(N/V\)</dt><dd id="qN">–</dd>
-        <dt>Average photon energy \(U/N\)</dt><dd id="qE">–</dd>
-        <dt>Entropy per photon \(S/N\)</dt><dd>3.60 \(k_{\mathrm{B}}\)</dd>
+        <dt data-k="k41">Energy density \(U/V\)</dt><dd id="qU">–</dd>
+        <dt data-k="k42">Photons per m³, \(N/V\)</dt><dd id="qN">–</dd>
+        <dt data-k="k43">Average photon energy \(U/N\)</dt><dd id="qE">–</dd>
+        <dt data-k="k44">Entropy per photon \(S/N\)</dt><dd>3.60 \(k_{\mathrm{B}}\)</dd>
         <dt class="sep"></dt>
-        <dt>Radiation pressure \(P\)</dt><dd id="qP">–</dd>
-        <dt>Air at 1 atm, for scale</dt><dd>1.01 × 10<sup>5</sup> Pa</dd>
-        <dt>Power per area \(\sigma T^4\)</dt><dd id="qS">–</dd>
+        <dt data-k="k45">Radiation pressure \(P\)</dt><dd id="qP">–</dd>
+        <dt data-k="k46">Air at 1 atm, for scale</dt><dd data-k="k47">1.01 × 10<sup>5</sup> Pa</dd>
+        <dt data-k="k48">Power per area \(\sigma T^4\)</dt><dd id="qS">–</dd>
       </dl>
     </div>
   </div>
-  <p class="prose note" style="margin-top:1.25rem">Problem 7.45 asks you to compare: radiation inside a 1500 K kiln exerts only about \(1.3 \times 10^{-3}\ \mathrm{Pa}\), a hundred-millionth of atmospheric pressure. At the center of the Sun, at 15 million K, radiation pressure reaches about \(1.3 \times 10^{13}\ \mathrm{Pa}\), yet the ionized hydrogen gas there (density about \(10^5\ \mathrm{kg/m^3}\)) exerts roughly \(2.5 \times 10^{16}\ \mathrm{Pa}\), about 2000 times more.</p>
+  <p class="prose note" style="margin-top:1.25rem" data-k="k49">Problem 7.45 asks you to compare: radiation inside a 1500 K kiln exerts only about \(1.3 \times 10^{-3}\ \mathrm{Pa}\), a hundred-millionth of atmospheric pressure. At the center of the Sun, at 15 million K, radiation pressure reaches about \(1.3 \times 10^{13}\ \mathrm{Pa}\), yet the ionized hydrogen gas there (density about \(10^5\ \mathrm{kg/m^3}\)) exerts roughly \(2.5 \times 10^{16}\ \mathrm{Pa}\), about 2000 times more.</p>
 </section>
 
 <!-- ============ CMB ============ -->
 <section id="cmb" aria-labelledby="h-cmb">
-  <h2 id="h-cmb">The cosmic background radiation</h2>
+  <h2 id="h-cmb" data-k="k50">The cosmic background radiation</h2>
   <div class="prose">
-    <p>The radiation that fills the entire observable universe has an almost perfect thermal spectrum at 2.73 K. Its \(u(f)\) peaks at \(\varepsilon = 2.82\,k_{\mathrm{B}}T = 6.6 \times 10^{-4}\ \mathrm{eV}\), corresponding to a wavelength of about 1 mm, in the far infrared. There are about \(4.1 \times 10^8\) of these photons in every cubic meter of space. Part of the “snow” on an old analog television tuned between channels came from this leftover glow of the Big Bang. Choose <em>Cosmic background</em> in the spectrum above to see it.</p>
+    <p data-k="k51">The radiation that fills the entire observable universe has an almost perfect thermal spectrum at 2.73 K. Its \(u(f)\) peaks at \(\varepsilon = 2.82\,k_{\mathrm{B}}T = 6.6 \times 10^{-4}\ \mathrm{eV}\), corresponding to a wavelength of about 1 mm, in the far infrared. There are about \(4.1 \times 10^8\) of these photons in every cubic meter of space. Part of the “snow” on an old analog television tuned between channels came from this leftover glow of the Big Bang. Choose <em>Cosmic background</em> in the spectrum above to see it.</p>
   </div>
 </section>
 
 <!-- ============ HOLE / STEFAN ============ -->
 <section id="hole" aria-labelledby="h-hole">
-  <h2 id="h-hole">Photons escaping through a hole</h2>
+  <h2 id="h-hole" data-k="k52">Photons escaping through a hole</h2>
   <div class="prose">
-    <p>Open a small hole of area \(A\) in a box of radiation. All photons travel at the same speed \(c\), regardless of wavelength, so the light that escapes has the same spectrum as the light inside. To find how much escapes in a time \(dt\), consider a chunk of the box at distance \(R\) and angle \(\theta\) from the hole, inside a hemispherical shell of thickness \(c\,dt\). Only photons in that shell can reach the hole during \(dt\).</p>
+    <p data-k="k53">Open a small hole of area \(A\) in a box of radiation. All photons travel at the same speed \(c\), regardless of wavelength, so the light that escapes has the same spectrum as the light inside. To find how much escapes in a time \(dt\), consider a chunk of the box at distance \(R\) and angle \(\theta\) from the hole, inside a hemispherical shell of thickness \(c\,dt\). Only photons in that shell can reach the hole during \(dt\).</p>
   </div>
 
   <div class="fig">
     <div>
       <div class="canvas-holder"><canvas id="geoCanvas" aria-label="Cross-section of the box showing a chunk of the shell at angle theta and the hole's apparent area"></canvas></div>
-      <div class="legend">
+      <div class="legend" data-k="k54">
         <span><span class="swatch" style="background:var(--planck)"></span>The chunk, volume \(R^2\sin\theta\,d\theta\,d\phi\,c\,dt\)</span>
         <span><span class="swatch line" style="background:var(--cool)"></span>The hole as seen from the chunk, \(A\cos\theta\)</span>
       </div>
     </div>
     <div class="panel">
       <div class="ctl">
-        <label for="thS"><span class="lt">Angle \(\theta\)</span> <output id="thOut"></output></label>
+        <label for="thS"><span data-k="k55"><span class="lt">Angle \(\theta\)</span></span> <output id="thOut"></output></label>
         <input type="range" id="thS" min="0" max="89" step="1" value="35">
       </div>
       <dl class="stats">
-        <dt>Apparent hole area</dt><dd id="gA">–</dd>
-        <dt>Chunk volume \(\propto \sin\theta\)</dt><dd id="gV">–</dd>
-        <dt>Contribution \(\propto \sin\theta\cos\theta\)</dt><dd id="gP">–</dd>
+        <dt data-k="k56">Apparent hole area</dt><dd id="gA">–</dd>
+        <dt data-k="k57">Chunk volume \(\propto \sin\theta\)</dt><dd id="gV">–</dd>
+        <dt data-k="k58">Contribution \(\propto \sin\theta\cos\theta\)</dt><dd id="gP">–</dd>
       </dl>
-      <p class="cap" style="margin:.75rem 0 0">Photons in the chunk point every which way, so the fraction aimed at the hole is its apparent area over the full sphere, \(A\cos\theta/4\pi R^2\). Head-on chunks see the whole hole but are small rings; grazing chunks are large but see the hole edge-on. The product peaks at 45°.</p>
+      <p class="cap" style="margin:.75rem 0 0" data-k="k59">Photons in the chunk point every which way, so the fraction aimed at the hole is its apparent area over the full sphere, \(A\cos\theta/4\pi R^2\). Head-on chunks see the whole hole but are small rings; grazing chunks are large but see the hole edge-on. The product peaks at 45°.</p>
     </div>
   </div>
 
   <div class="prose" style="margin-top:1.5rem">
-    <p>The chunk holds energy \((U/V)\,R^2\sin\theta\,d\theta\,d\phi\,c\,dt\), and a fraction \(A\cos\theta/4\pi R^2\) of it heads for the hole; \(R\) cancels. Integrating over \(\phi\) from 0 to \(2\pi\) and \(\theta\) from 0 to \(\pi/2\),</p>
+    <p data-k="k60">The chunk holds energy \((U/V)\,R^2\sin\theta\,d\theta\,d\phi\,c\,dt\), and a fraction \(A\cos\theta/4\pi R^2\) of it heads for the hole; \(R\) cancels. Integrating over \(\phi\) from 0 to \(2\pi\) and \(\theta\) from 0 to \(\pi/2\),</p>
     <div class="eq multi chain"><span class="eqp">\( \displaystyle \text{energy escaping} \)</span><span class="eqp">\( \displaystyle = \int_0^{2\pi}\! d\phi \int_0^{\pi/2}\! d\theta\, \frac{A\cos\theta}{4\pi}\,\frac{U}{V}\,c\,dt\,\sin\theta \)</span><span class="eqp">\( \displaystyle = \frac{A}{4}\,\frac{U}{V}\,c\,dt \)</span></div>
-    <p>The factor of \(\tfrac14\) is easy to check by brute force. Below, 2000 photons fly around a box at speed \(c\), bouncing off the walls; any that hit the hole escape. To keep the radiation inside in equilibrium, each is replaced by a photon entering through the hole, as if the hole opened onto more radiation at the same temperature. Compare the counted escape rate with \(\tfrac14 (N/V)\,c\,A\), and the escape angles with \(\sin\theta\cos\theta\).</p>
+    <p data-k="k61">The factor of \(\tfrac14\) is easy to check by brute force. Below, 2000 photons fly around a box at speed \(c\), bouncing off the walls; any that hit the hole escape. To keep the radiation inside in equilibrium, each is replaced by a photon entering through the hole, as if the hole opened onto more radiation at the same temperature. Compare the counted escape rate with \(\tfrac14 (N/V)\,c\,A\), and the escape angles with \(\sin\theta\cos\theta\).</p>
   </div>
 
   <div class="fig">
     <div>
       <div class="canvas-holder"><canvas id="boxCanvas" aria-label="Simulation of photons bouncing inside a box and escaping through a hole in the right wall"></canvas></div>
       <div class="canvas-holder" style="margin-top:.75rem"><canvas id="histCanvas" aria-label="Histogram of the angles at which photons escape, compared with sin theta cos theta"></canvas></div>
-      <div class="legend">
+      <div class="legend" data-k="k62">
         <span><span class="swatch" style="background:var(--planck)"></span>Escaped photons, by angle from the hole’s normal</span>
         <span><span class="swatch line" style="background:var(--ink)"></span>Prediction \(\propto \sin\theta\cos\theta\)</span>
       </div>
@@ -321,93 +339,93 @@ button.theme-btn svg{width:20px; height:20px; fill:none; stroke:currentColor; st
     <div class="panel">
       <div class="ctl btns">
         <button type="button" id="simPlay">Pause</button>
-        <button type="button" id="simReset">Reset counts</button>
+        <button type="button" id="simReset" data-k="k63">Reset counts</button>
       </div>
       <div class="ctl">
-        <label for="simSpeed"><span class="lt">Simulation speed</span> <output id="simSpeedOut"></output></label>
+        <label for="simSpeed"><span data-k="k64"><span class="lt">Simulation speed</span></span> <output id="simSpeedOut"></output></label>
         <input type="range" id="simSpeed" min="0.25" max="4" step="0.25" value="1">
       </div>
       <dl class="stats" aria-live="off">
-        <dt>Photons \(N\)</dt><dd>2,000</dd>
-        <dt>Hole area \(A\)</dt><dd>\((0.3L)^2\)</dd>
-        <dt>Escapes</dt><dd id="simN">0</dd>
+        <dt data-k="k65">Photons \(N\)</dt><dd>2,000</dd>
+        <dt data-k="k66">Hole area \(A\)</dt><dd>\((0.3L)^2\)</dd>
+        <dt data-k="k67">Escapes</dt><dd id="simN">0</dd>
         <dt class="sep"></dt>
-        <dt>Escape rate, measured</dt><dd id="simRate">–</dd>
+        <dt data-k="k68">Escape rate, measured</dt><dd id="simRate">–</dd>
         <dt>\(\tfrac14 (N/V)\,c\,A\)</dt><dd id="simPred">–</dd>
-        <dt>Ratio</dt><dd id="simRatio">–</dd>
+        <dt data-k="k69">Ratio</dt><dd id="simRatio">–</dd>
       </dl>
-      <p class="cap" style="margin:.75rem 0 0">Rates are per unit of simulation time, with \(c = 0.45\) box lengths per unit. The view is from the front, so photons at all depths overlap; only 1 in 5 is drawn.</p>
+      <p class="cap" style="margin:.75rem 0 0" data-k="k70">Rates are per unit of simulation time, with \(c = 0.45\) box lengths per unit. The view is from the front, so photons at all depths overlap; only 1 in 5 is drawn.</p>
     </div>
   </div>
 
   <div class="prose" style="margin-top:1.5rem">
     <div class="eq"><span class="boxed multi"><span class="eqp">\( \displaystyle \frac{\text{power}}{\text{area}} = \frac{c}{4}\frac{U}{V} = \frac{2\pi^5}{15}\frac{(k_{\mathrm{B}}T)^4}{h^3c^2} = \sigma T^4, \)</span><span class="eqp">\( \displaystyle \sigma = 5.67 \times 10^{-8}\ \mathrm{W\,m^{-2}\,K^{-4}} \)</span></span></div>
-    <p>This is Stefan’s law, discovered empirically in 1879 (remember “5–6–7–8”). Any nonreflecting (“black”) surface at the same temperature must emit the same power, and indeed the same entire spectrum, as the hole; otherwise placing it next to the hole, with a wavelength filter in between, would violate the second law. A surface that reflects some photons emits correspondingly less: power \(= \sigma e A T^4\), where \(e\) is the emissivity.</p>
+    <p data-k="k71">This is Stefan’s law, discovered empirically in 1879 (remember “5–6–7–8”). Any nonreflecting (“black”) surface at the same temperature must emit the same power, and indeed the same entire spectrum, as the hole; otherwise placing it next to the hole, with a wavelength filter in between, would violate the second law. A surface that reflects some photons emits correspondingly less: power \(= \sigma e A T^4\), where \(e\) is the emissivity.</p>
   </div>
 </section>
 
 <!-- ============ SUN AND EARTH ============ -->
 <section id="earth" aria-labelledby="h-earth">
-  <h2 id="h-earth">The Sun and the Earth</h2>
+  <h2 id="h-earth" data-k="k72">The Sun and the Earth</h2>
   <div class="prose">
-    <p>The Earth receives 1370 W/m² of sunlight (the solar constant) at a distance of \(1.5 \times 10^{8}\ \mathrm{km}\), so the Sun’s total output is \(4\pi (1.5 \times 10^{11}\ \mathrm{m})^2 \times 1370\ \mathrm{W/m^2} \approx 3.9 \times 10^{26}\ \mathrm{W}\). Its radius is about \(7.0 \times 10^8\ \mathrm{m}\), so with emissivity 1, \(T_\odot = (L/\sigma A)^{1/4} \approx 5800\ \mathrm{K}\).</p>
+    <p data-k="k73">The Earth receives 1370 W/m² of sunlight (the solar constant) at a distance of \(1.5 \times 10^{8}\ \mathrm{km}\), so the Sun’s total output is \(4\pi (1.5 \times 10^{11}\ \mathrm{m})^2 \times 1370\ \mathrm{W/m^2} \approx 3.9 \times 10^{26}\ \mathrm{W}\). Its radius is about \(7.0 \times 10^8\ \mathrm{m}\), so with emissivity 1, \(T_\odot = (L/\sigma A)^{1/4} \approx 5800\ \mathrm{K}\).</p>
   </div>
 
   <div class="canvas-holder" style="margin:1.5rem 0 .5rem"><canvas id="orbitCanvas" aria-label="The Earth orbiting the Sun, with the intercepted sunlight and a close-up of the Earth absorbing and radiating"></canvas></div>
   <div class="legend" style="margin-bottom:1.5rem;align-items:center">
-    <span><span class="swatch" style="background:var(--sun)"></span>Sunlight, spreading over a sphere of area \(4\pi d^2\)</span>
+    <span data-k="k74"><span><span class="swatch" style="background:var(--sun)"></span>Sunlight, spreading over a sphere of area \(4\pi d^2\)</span>
     <span><span class="swatch" style="background:var(--res)"></span>Infrared radiated by the Earth</span>
-    <span>Not to scale: the Sun and Earth are drawn far larger than life.</span>
+    <span>Not to scale: the Sun and Earth are drawn far larger than life.</span></span>
     <button type="button" id="orbitPlay" style="margin-left:auto">Pause orbit</button>
   </div>
 
   <div class="prose">
-    <p>The Earth absorbs sunlight across its disk, \(\pi r_E^2\), but radiates from its whole surface, \(4\pi r_E^2\). Balancing the two gives the Earth’s temperature:</p>
+    <p data-k="k75">The Earth absorbs sunlight across its disk, \(\pi r_E^2\), but radiates from its whole surface, \(4\pi r_E^2\). Balancing the two gives the Earth’s temperature:</p>
     <div class="eq multi"><span class="eqp">\( \displaystyle (1 - \text{albedo})\,(\text{solar constant})\,\pi r_E^2 = 4\pi r_E^2\,\sigma T^4 \)</span><span class="eqp">\( \displaystyle \Longrightarrow\; T = \left[\frac{(1-\text{albedo})\times 1370\ \mathrm{W/m^2}}{4\sigma}\right]^{1/4} \)</span></div>
-    <p>Model the atmosphere as a single layer, transparent to visible light but opaque to infrared. In equilibrium the surface then receives twice as much energy as from sunlight alone, raising its temperature by \(2^{1/4}\): the greenhouse effect.</p>
+    <p data-k="k76">Model the atmosphere as a single layer, transparent to visible light but opaque to infrared. In equilibrium the surface then receives twice as much energy as from sunlight alone, raising its temperature by \(2^{1/4}\): the greenhouse effect.</p>
   </div>
 
   <div class="fig">
     <div>
       <div class="canvas-holder"><canvas id="earthCanvas" aria-label="Energy budget of the Earth's surface and atmosphere"></canvas></div>
-      <p class="cap">Energy flows averaged over the whole surface, in W/m². Sunlight (mostly visible) is drawn in gold, infrared in gray. Arrow widths are proportional to the flows.</p>
+      <p class="cap" data-k="k77">Energy flows averaged over the whole surface, in W/m². Sunlight (mostly visible) is drawn in gold, infrared in gray. Arrow widths are proportional to the flows.</p>
     </div>
     <div class="panel">
       <div class="big" id="eT">–</div>
       <p class="cap" id="eTc" style="margin:0 0 1rem"></p>
       <div class="ctl btns">
-        <button type="button" id="eP1">Perfect blackbody</button>
-        <button type="button" id="eP2">30% reflected</button>
-        <button type="button" id="eP3">With greenhouse</button>
+        <button type="button" id="eP1" data-k="k78">Perfect blackbody</button>
+        <button type="button" id="eP2" data-k="k79">30% reflected</button>
+        <button type="button" id="eP3" data-k="k80">With greenhouse</button>
       </div>
       <div class="ctl">
-        <label for="eSun"><span class="lt">Sun’s surface \(T_\odot\)</span> <output id="eSunOut"></output></label>
+        <label for="eSun"><span data-k="k81"><span class="lt">Sun’s surface \(T_\odot\)</span></span> <output id="eSunOut"></output></label>
         <input type="range" id="eSun" min="3000" max="9000" step="10" value="5772">
       </div>
       <div class="ctl">
-        <label for="eD"><span class="lt">Distance from the Sun</span> <output id="eDOut"></output></label>
+        <label for="eD"><span data-k="k82"><span class="lt">Distance from the Sun</span></span> <output id="eDOut"></output></label>
         <input type="range" id="eD" min="0.3" max="2" step="0.01" value="1">
-        <small>In astronomical units (1 AU = \(1.5 \times 10^8\) km). Venus is at 0.72, Mars at 1.52.</small>
+        <span data-k="k83"><small>In astronomical units (1 AU = \(1.5 \times 10^8\) km). Venus is at 0.72, Mars at 1.52.</small></span>
       </div>
       <div class="ctl">
-        <label for="eA"><span class="lt">Albedo (fraction reflected)</span> <output id="eAOut"></output></label>
+        <label for="eA"><span data-k="k84"><span class="lt">Albedo (fraction reflected)</span></span> <output id="eAOut"></output></label>
         <input type="range" id="eA" min="0" max="0.8" step="0.01" value="0">
       </div>
-      <div class="ctl"><label class="check" for="eG"><input type="checkbox" id="eG"> Single-layer greenhouse atmosphere</label></div>
+      <div class="ctl"><label class="check" for="eG"><input type="checkbox" id="eG"> <span data-k="k85">Single-layer greenhouse atmosphere</span></label></div>
       <dl class="stats">
-        <dt>Solar constant</dt><dd id="eS">–</dd>
-        <dt>Measured average surface</dt><dd>288 K (15 °C)</dd>
+        <dt data-k="k86">Solar constant</dt><dd id="eS">–</dd>
+        <dt data-k="k87">Measured average surface</dt><dd>288 K (15 °C)</dd>
       </dl>
     </div>
   </div>
-  <p class="prose note" style="margin-top:1.25rem">The single-layer model overshoots (303 K) because the real atmosphere isn’t one perfectly opaque layer. Most actual greenhouses work mainly by a different mechanism, limiting convective cooling. The default Sun temperature, 5772 K, reproduces the 1370 W/m² solar constant to within about 1%.</p>
+  <p class="prose note" style="margin-top:1.25rem" data-k="k88">The single-layer model overshoots (303 K) because the real atmosphere isn’t one perfectly opaque layer. Most actual greenhouses work mainly by a different mechanism, limiting convective cooling. The default Sun temperature, 5772 K, reproduces the 1370 W/m² solar constant to within about 1%.</p>
 </section>
 </div>
 
 <footer>
   <div class="wrap">
-    <p>Created by Claude Opus 5.5, based on the lecture notes by Sang Hoon Lee on quantum statistics (Section 7.4, Blackbody Radiation, with Problems 7.39, 7.40, 7.44, 7.45 and 7.46).</p>
-    <p>Constants: \(h = 6.626 \times 10^{-34}\ \mathrm{J\,s}\), \(k_{\mathrm{B}} = 1.381 \times 10^{-23}\ \mathrm{J/K}\), \(c = 2.998 \times 10^8\ \mathrm{m/s}\), \(\sigma = 5.670 \times 10^{-8}\ \mathrm{W\,m^{-2}\,K^{-4}}\). Colors use an analytic fit to the CIE 1931 color-matching functions (Wyman, Sloan and Shirley, 2013). Equations typeset with MathJax.</p>
+    <p data-k="k89">Created by Claude Opus 5.5, based on the lecture notes by Sang Hoon Lee on quantum statistics (Section 7.4, Blackbody Radiation, with Problems 7.39, 7.40, 7.44, 7.45 and 7.46).</p>
+    <p data-k="k90">Constants: \(h = 6.626 \times 10^{-34}\ \mathrm{J\,s}\), \(k_{\mathrm{B}} = 1.381 \times 10^{-23}\ \mathrm{J/K}\), \(c = 2.998 \times 10^8\ \mathrm{m/s}\), \(\sigma = 5.670 \times 10^{-8}\ \mathrm{W\,m^{-2}\,K^{-4}}\). Colors use an analytic fit to the CIE 1931 color-matching functions (Wyman, Sloan and Shirley, 2013). Equations typeset with MathJax.</p>
   </div>
 </footer>
 
@@ -421,8 +439,8 @@ function readColors(){
   ['bg','surface','ink','muted','rule','band','planck','sun','classic','cool','approx','res'].forEach(k => C[k] = cs.getPropertyValue('--'+k).trim());
 }
 readColors();
-const SANS = '"Instrument Sans", system-ui, sans-serif';
-const SERIF = '"Newsreader", Georgia, serif';
+const SANS = '"Instrument Sans", "IBM Plex Sans KR", system-ui, sans-serif';
+const SERIF = '"Newsreader", "IBM Plex Sans KR", Georgia, serif';
 function fit(cv, LW, LH){
   const w = cv.parentElement.clientWidth || LW, hgt = w*LH/LW;
   cv.style.height = hgt + 'px';
@@ -516,23 +534,23 @@ function modeRender(){
   };
   panel(modeCtx, x => x/Math.expm1(x), x => 1, 1.25, [['Ē','i'],[' / ','r'],['k','i'],['B','sub'],['T','i']], [0,0.5,1]);
   panel(rjCtx, x => x*x*x/Math.expm1(x), x => x*x, 4.5, [['x','i'],['3','sup'],['/(e','r'],['x','sup'],[' − 1)','r'],['   vs   ','s'],['x','i'],['2','sup']], [0,1,2,3,4]);
-  if (rjCtx){ rjCtx.fillStyle=C.planck; rjCtx.font='12px '+SANS; rjCtx.textAlign='left'; const W=440,L=46,R=14,T=16,H=300,B=44; const X=x=>L+x/12*(W-L-R), Y=v=>H-B-v/4.5*(H-T-B); rjCtx.fillText('peak at 2.82', X(2.82)-28, Y(1.42)-10); }
+  if (rjCtx){ rjCtx.fillStyle=C.planck; rjCtx.font='12px '+SANS; rjCtx.textAlign='left'; const W=440,L=46,R=14,T=16,H=300,B=44; const X=x=>L+x/12*(W-L-R), Y=v=>H-B-v/4.5*(H-T-B); rjCtx.fillText(tr('peak at 2.82','2.82에서 최대'), X(2.82)-28, Y(1.42)-10); }
 }
 $('xS').addEventListener('input', e => { xP = +e.target.value; modeRender(); });
 
 /* ================= SPECTRUM ================= */
 const PRESETS = [
-  {k:'cmb', name:'Cosmic background', T:2.725},
-  {k:'room', name:'Room', T:300},
-  {k:'kiln', name:'Kiln', T:1500},
-  {k:'bulb', name:'Light bulb', T:2800},
-  {k:'sun', name:'Sun', T:5800},
-  {k:'star', name:'Hot star', T:20000}
+  {k:'cmb', name:'Cosmic background', ko:'우주 배경 복사', T:2.725},
+  {k:'room', name:'Room', ko:'실온', T:300},
+  {k:'kiln', name:'Kiln', ko:'가마', T:1500},
+  {k:'bulb', name:'Light bulb', ko:'백열전구', T:2800},
+  {k:'sun', name:'Sun', ko:'태양', T:5800},
+  {k:'star', name:'Hot star', ko:'뜨거운 별', T:20000}
 ];
 const SP = {T:5800, view:'lam', pins:[]};
 const QT = {T:1500};
 function presetButtons(id, target, sliderId, render){
-  $(id).innerHTML = PRESETS.map(p => '<button type="button" data-p="'+p.k+'">'+p.name+'</button>').join('');
+  $(id).innerHTML = PRESETS.map(p => '<button type="button" data-p="'+p.k+'">'+tr(p.name,p.ko)+'</button>').join('');
   $(id).querySelectorAll('button').forEach(b => b.addEventListener('click', () => { const p = PRESETS.find(q=>q.k===b.dataset.p); target.T = p.T; $(sliderId).value = Math.log10(p.T).toFixed(3); render(); }));
 }
 function markPresets(id, T){ $(id).querySelectorAll('button[data-p]').forEach(b => { const p = PRESETS.find(q=>q.k===b.dataset.p); b.setAttribute('aria-pressed', String(Math.abs(Math.log10(p.T/T)) < 0.002)); }); }
@@ -549,12 +567,12 @@ function specRender(){
   $('sLamE').innerHTML = lenStr(h*c0/(epsMax*eV));
   // glow
   const chip = $('glowChip');
-  if (T < 798){ chip.style.background = '#000'; $('glowTitle').textContent = 'No visible glow'; $('glowNote').textContent = ' Too cold: nearly all of the radiation is infrared or longer.'; }
+  if (T < 798){ chip.style.background = '#000'; $('glowTitle').textContent = tr('No visible glow','보이는 빛 없음'); $('glowNote').textContent = tr(' Too cold: nearly all of the radiation is infrared or longer.',' 너무 차가움: 복사가 거의 모두 적외선이거나 그보다 긴 파장입니다.'); }
   else {
     const rgb = bbColor(T); const k = T < 1100 ? 0.25 + 0.75*(T-798)/300 : 1;
     chip.style.background = rgbStr(rgb, k);
-    $('glowTitle').textContent = 'Color of the glow';
-    $('glowNote').textContent = T < 1100 ? ' Dim red, just becoming visible.' : T < 3500 ? ' Orange-white, like a filament.' : T < 7000 ? ' Nearly white, like sunlight.' : ' Bluish white.';
+    $('glowTitle').textContent = tr('Color of the glow','빛의 색');
+    $('glowNote').textContent = T < 1100 ? tr(' Dim red, just becoming visible.',' 막 보이기 시작하는 어두운 빨강.') : T < 3500 ? tr(' Orange-white, like a filament.',' 필라멘트 같은 주황빛 흰색.') : T < 7000 ? tr(' Nearly white, like sunlight.',' 햇빛 같은 거의 흰색.') : tr(' Bluish white.',' 푸르스름한 흰색.');
   }
   const c = specCtx; if (!c) return;
   const W=640,H=400,L=20,R=16,T0=16,B=58;
@@ -576,8 +594,8 @@ function specRender(){
   const eticks = [[1e-3,'1 meV'],[1e-2,'10 meV'],[0.1,'0.1 eV'],[1,'1 eV'],[10,'10 eV']];
   (lam ? lticks : eticks).forEach(([v,lab]) => { const x=X(v); if (x<L-1||x>W-R+1) return; c.strokeStyle=C.band; c.lineWidth=1; c.beginPath(); c.moveTo(x,T0); c.lineTo(x,H-B); c.stroke(); c.fillText(lab, x, H-B+24); });
   c.fillStyle=C.muted;
-  rich(c, W-R-2, H-10, 15, lam ? [['wavelength ','s'],['λ','i'],['  (log scale)','s']] : [['photon energy ','s'],['ε','i'],['  (log scale)','s']], 'right');
-  rich(c, W-R-6, T0+14, 15, lam ? [['u','i'],['(','r'],['λ','i'],[')','r'],[', relative to its peak','s']] : [['u','i'],['(','r'],['ε','i'],[')','r'],[', relative to its peak','s']], 'right');
+  rich(c, W-R-2, H-10, 15, lam ? [[tr('wavelength ','파장 '),'s'],['λ','i'],[tr('  (log scale)','  (로그 눈금)'),'s']] : [[tr('photon energy ','광자 에너지 '),'s'],['ε','i'],[tr('  (log scale)','  (로그 눈금)'),'s']], 'right');
+  rich(c, W-R-6, T0+14, 15, lam ? [['u','i'],['(','r'],['λ','i'],[')','r'],[tr(', relative to its peak',', 최댓값에 대한 비'),'s']] : [['u','i'],['(','r'],['ε','i'],[')','r'],[tr(', relative to its peak',', 최댓값에 대한 비'),'s']], 'right');
   // curves
   const shape = (v, TT) => lam ? 1/(Math.pow(v,5)*Math.expm1(h*c0/(v*kB*TT))) : Math.pow(v,3)/Math.expm1(v*eV/(kB*TT));
   const peakV = TT => lam ? 0.2014052*h*c0/(kB*TT) : 2.8214394*kB*TT/eV;
@@ -636,15 +654,15 @@ function earthRender(){
   $('eG').checked = E.gh;
   $('eS').textContent = Math.round(S).toLocaleString('en-US') + ' W/m²';
   $('eT').textContent = Math.round(Tg) + ' K';
-  $('eTc').textContent = 'Surface temperature, ' + Math.round(Tg-273.15) + ' °C. ' + (Tg < 273 ? 'Below freezing.' : Tg > 373 ? 'Above boiling.' : '');
+  $('eTc').textContent = tr('Surface temperature, ','표면 온도 ') + Math.round(Tg-273.15) + ' °C. ' + (Tg < 273 ? tr('Below freezing.','어는점 아래.') : Tg > 373 ? tr('Above boiling.','끓는점 위.') : '');
   const c = earthCtx; if (!c) return;
   const W=640,H=380;
   c.clearRect(0,0,W,H); c.fillStyle=C.surface; c.fillRect(0,0,W,H);
   const scale = 0.055; // px per W/m^2
   const ground = 320, atm = 150;
   // ground
-  c.fillStyle=C.band; c.fillRect(0,ground,W,H-ground); c.fillStyle=C.muted; c.font='13px '+SANS; c.textAlign='right'; c.fillText('Ground  ' + Math.round(Tg) + ' K', W-14, ground+24);
-  if (E.gh){ c.fillStyle=C.rule; c.fillRect(0,atm-6,W,12); c.fillStyle=C.muted; c.fillText('Atmosphere  ' + Math.round(Te) + ' K', W-14, atm-14); }
+  c.fillStyle=C.band; c.fillRect(0,ground,W,H-ground); c.fillStyle=C.muted; c.font='13px '+SANS; c.textAlign='right'; c.fillText(tr('Ground  ','지표  ') + Math.round(Tg) + ' K', W-14, ground+24);
+  if (E.gh){ c.fillStyle=C.rule; c.fillRect(0,atm-6,W,12); c.fillStyle=C.muted; c.fillText(tr('Atmosphere  ','대기  ') + Math.round(Te) + ' K', W-14, atm-14); }
   const arrow = (x, y1, y2, flux, col, wavy) => {
     const w = Math.max(2, flux*scale); const dir = Math.sign(y2-y1);
     c.strokeStyle=col; c.fillStyle=col; c.lineWidth=w; c.lineCap='butt';
@@ -657,18 +675,18 @@ function earthRender(){
   };
   // sunlight in (visible light, gold); infrared in gray
   c.fillStyle=rgbStr(bbColor(E.Ts)); c.strokeStyle=C.sun; c.lineWidth=2; c.beginPath(); c.arc(52,40,20,0,7); c.fill(); c.stroke();
-  c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('Sunlight, averaged over the globe (solar constant ÷ 4)', 82, 44);
+  c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText(tr('Sunlight, averaged over the globe (solar constant ÷ 4)','지구 전체에 대해 평균한 햇빛 (태양 상수 ÷ 4)'), 82, 44);
   arrow(70, 70, ground, S/4, C.sun, false);
-  if (E.alb > 0){ arrow(190, ground-4, 76, S/4*E.alb, C.sun, false); c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('reflected', 202, 96); }
+  if (E.alb > 0){ arrow(190, ground-4, 76, S/4*E.alb, C.sun, false); c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText(tr('reflected','반사'), 202, 96); }
   const gEmit = SIGMA*Math.pow(Tg,4);
   if (E.gh){
     arrow(320, ground-2, atm+8, gEmit, C.res, true);
     arrow(440, atm-8, 66, absorbed, C.res, true);
     arrow(540, atm+8, ground-2, absorbed, C.res, true);
-    c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('infrared to space', 410, 58); c.fillText('back to the ground', 486, atm+30);
+    c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText(tr('infrared to space','우주로 가는 적외선'), 410, 58); c.fillText(tr('back to the ground','지표로 되돌아옴'), 486, atm+30);
   } else {
     arrow(400, ground-2, 66, gEmit, C.res, true);
-    c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText('infrared to space', 370, 58);
+    c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left'; c.fillText(tr('infrared to space','우주로 가는 적외선'), 370, 58);
   }
 }
 $('eSun').addEventListener('input', e => { E.Ts = +e.target.value; earthRender(); });
@@ -730,13 +748,13 @@ function geoRender(){
   c.lineWidth=1; c.setLineDash([2,3]); c.beginPath(); c.moveTo(ox-nx*half, oy-ny*half); c.lineTo(hx, hy-ha); c.moveTo(ox+nx*half, oy+ny*half); c.lineTo(hx, hy+ha); c.stroke(); c.setLineDash([]);
   // labels
   c.fillStyle=C.cool; rich(c, hx-10, hy+ha+18, 16, [['A','i']], 'right');
-  rich(c, hx-10, hy+ha+42, 14, [['A','i'],[' cos ','r'],['θ','i'],[': the hole','s']], 'right');
-  rich(c, hx-10, hy+ha+58, 14, [['as seen from the chunk','s']], 'right');
+  rich(c, hx-10, hy+ha+42, 14, [['A','i'],[' cos ','r'],['θ','i'],[tr(': the hole',': 구멍'),'s']], 'right');
+  rich(c, hx-10, hy+ha+58, 14, [[tr('as seen from the chunk','(덩어리에서 본 모습)'),'s']], 'right');
   c.fillStyle=C.planck;
   rich(c, (px+hx)/2 + 8, (pyU+hy)/2 - 6, 16, [['R','i']], 'left');
   const la = th + 0.16, lx = hx - (R+cdt+14)*Math.cos(la), ly = hy - (R+cdt+14)*Math.sin(la);
   c.fillStyle=C.ink; rich(c, Math.max(bx0+40, lx), Math.max(by0+18, ly), 15, [['c','i'],[' ','r'],['dt','i']], 'right');
-  c.fillStyle=C.muted; rich(c, bx0+12, by1-14, 14, [['Box of photons, cross-section','s']], 'left');
+  c.fillStyle=C.muted; rich(c, bx0+12, by1-14, 14, [[tr('Box of photons, cross-section','광자 상자, 단면'),'s']], 'left');
   // escaping wiggles outside
   c.strokeStyle=C.planck; c.lineWidth=1.6;
   for (let k=0;k<3;k++){ const yy = hy - 10 + k*10, ang = (-25 + k*25)*Math.PI/180; c.beginPath(); for (let t=0;t<=48;t+=2){ const x = hx+10+t*Math.cos(ang) - Math.sin(ang)*Math.sin(t/4)*3, y = yy + t*Math.sin(ang) + Math.cos(ang)*Math.sin(t/4)*3; t?c.lineTo(x,y):c.moveTo(x,y); } c.stroke(); }
@@ -786,10 +804,10 @@ function simStats(){
   const pred = 0.25*SIM.N*SIM.c*SIM.a*SIM.a;
   $('simN').textContent = SIM.esc.toLocaleString('en-US');
   $('simPred').textContent = pred.toFixed(2);
-  if (SIM.t > 0.5){ const r = SIM.esc/SIM.t; $('simRate').textContent = r.toFixed(2); $('simRatio').textContent = (r/pred).toFixed(3) + (SIM.esc < 200 ? ' (still noisy)' : ''); }
+  if (SIM.t > 0.5){ const r = SIM.esc/SIM.t; $('simRate').textContent = r.toFixed(2); $('simRatio').textContent = (r/pred).toFixed(3) + (SIM.esc < 200 ? tr(' (still noisy)',' (아직 잡음이 큼)') : ''); }
   else { $('simRate').textContent = '–'; $('simRatio').textContent = '–'; }
   $('simSpeedOut').textContent = SIM.speed.toFixed(2) + '×';
-  $('simPlay').textContent = SIM.running ? 'Pause' : 'Play';
+  $('simPlay').textContent = SIM.running ? tr('Pause','일시 정지') : tr('Play','재생');
 }
 function boxDraw(){
   const c = boxCtx; if (!c) return;
@@ -813,9 +831,9 @@ function boxDraw(){
   });
   c.globalAlpha = 1;
   c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='left';
-  c.fillText('Box (front view)', x0, y0-8);
-  c.fillStyle=C.cool; c.textAlign='right'; c.fillText('Hole', X(1)-8, hy1+16); c.textAlign='left';
-  c.fillStyle=C.muted; c.fillText('Escaping light', X(1)+70, y0+14);
+  c.fillText(tr('Box (front view)','상자 (정면)'), x0, y0-8);
+  c.fillStyle=C.cool; c.textAlign='right'; c.fillText(tr('Hole','구멍'), X(1)-8, hy1+16); c.textAlign='left';
+  c.fillStyle=C.muted; c.fillText(tr('Escaping light','빠져나가는 빛'), X(1)+70, y0+14);
 }
 function histDraw(){
   const c = histCtx; if (!c) return;
@@ -835,8 +853,8 @@ function histDraw(){
   c.fillStyle=C.ink; pred.forEach((v,k) => { c.beginPath(); c.arc(L+k*bw+bw/2, Y(v), 3, 0, 7); c.fill(); });
   c.fillStyle=C.muted; c.textAlign='center';
   for (let k=0;k<=9;k++) c.fillText((k*10)+'°', L+k*bw, H-B+16);
-  rich(c, W-R, H-6, 14, [['escape angle ','s'],['θ','i'],[' from the normal','s']], 'right');
-  rich(c, L+6, T+10, 13, [['fraction of escapes','s']], 'left');
+  rich(c, W-R, H-6, 14, (LANG==='ko' ? [['법선에서 잰 탈출 각 ','s'],['θ','i']] : [['escape angle ','s'],['θ','i'],[' from the normal','s']]), 'right');
+  rich(c, L+6, T+10, 13, [[tr('fraction of escapes','탈출 비율'),'s']], 'left');
 }
 let simLast = performance.now(), simVisible = true, statT = 0;
 function simLoop(now){
@@ -872,8 +890,8 @@ function orbitDraw(){
   const ell = (a, col, w, dash, alpha) => { c.save(); c.globalAlpha=alpha; c.strokeStyle=col; c.lineWidth=w; c.setLineDash(dash); c.beginPath(); c.ellipse(cx, cy, a*k, a*k*tilt, 0, 0, 2*Math.PI); c.stroke(); c.restore(); };
   ell(0.72, C.muted, 1, [3,5], 0.5); ell(1.52, C.muted, 1, [3,5], 0.5);
   c.fillStyle=C.muted; c.font='12px '+SANS; c.textAlign='center';
-  c.fillText('Venus’s orbit, 0.72 AU', cx, cy - 0.72*k*tilt - 6);
-  c.fillText('Mars’s orbit, 1.52 AU', cx, cy - 1.52*k*tilt - 6);
+  c.fillText(tr('Venus’s orbit, 0.72 AU','금성 궤도, 0.72 AU'), cx, cy - 0.72*k*tilt - 6);
+  c.fillText(tr('Mars’s orbit, 1.52 AU','화성 궤도, 1.52 AU'), cx, cy - 1.52*k*tilt - 6);
   // Earth position
   const ex = cx + E.d*k*Math.cos(ORB.ang), ey = cy + E.d*k*tilt*Math.sin(ORB.ang);
   const behind = Math.sin(ORB.ang) < 0;   // far side of the Sun
@@ -904,7 +922,7 @@ function orbitDraw(){
     const left = ex > 470 || ex < 60 && false; const side = ex > 470 ? -1 : 1;
     c.textAlign = side > 0 ? 'left' : 'right';
     const lx = ex + side*14, ly = ey + (Math.sin(ORB.ang) > 0 ? 22 : -18);
-    haloText(c, 'Earth  ' + Math.round(Tg) + ' K', lx, ly, '600 13px '+SANS, C.ink);
+    haloText(c, tr('Earth  ','지구  ') + Math.round(Tg) + ' K', lx, ly, '600 13px '+SANS, C.ink);
     haloText(c, Math.round(S).toLocaleString('en-US') + ' W/m² arriving', lx, ly + 15, '12px '+SANS, C.muted);
     c.textAlign = 'left';
   };
@@ -924,7 +942,7 @@ function orbitDraw(){
   const ix = 640, iy = 26, iw = 244, ih = 348;
   c.fillStyle = C.bg; c.strokeStyle = C.rule; c.lineWidth = 1;
   c.beginPath(); c.roundRect ? c.roundRect(ix, iy, iw, ih, 6) : c.rect(ix, iy, iw, ih); c.fill(); c.stroke();
-  c.fillStyle = C.ink; c.font = '600 13px '+SANS; c.textAlign = 'left'; c.fillText('Close-up of the Earth', ix + 14, iy + 22);
+  c.fillStyle = C.ink; c.font = '600 13px '+SANS; c.textAlign = 'left'; c.fillText(tr('Close-up of the Earth','지구 확대'), ix + 14, iy + 22);
   const ox = ix + 140, oy = iy + 170, rE = 46;
   // parallel sunlight from the left, stopped by the disk
   c.strokeStyle = C.sun; c.fillStyle = C.sun; c.lineWidth = 2;
@@ -947,10 +965,10 @@ function orbitDraw(){
   // cross-section disk (seen edge-on as a line)
   c.strokeStyle = C.sun; c.lineWidth = 3; c.beginPath(); c.moveTo(ox, oy - rE); c.lineTo(ox, oy + rE); c.stroke();
   c.fillStyle = C.ink; c.font = '12px '+SANS; c.textAlign = 'left';
-  rich(c, ix + 14, iy + 52, 14, [['Absorbs sunlight over its disk, ','s'],['π','r'],['r','i'],['E','isub'],['2','sup']], 'left');
-  rich(c, ix + 14, iy + ih - 40, 14, [['Radiates over its surface, ','s'],['4π','r'],['r','i'],['E','isub'],['2','sup']], 'left');
+  rich(c, ix + 14, iy + 52, 14, [[tr('Absorbs sunlight over its disk, ','원판 넓이로 햇빛을 흡수, '),'s'],['π','r'],['r','i'],['E','isub'],['2','sup']], 'left');
+  rich(c, ix + 14, iy + ih - 40, 14, [[tr('Radiates over its surface, ','겉넓이 전체로 복사, '),'s'],['4π','r'],['r','i'],['E','isub'],['2','sup']], 'left');
   c.fillStyle = C.muted;
-  rich(c, ix + 14, iy + ih - 18, 13, [['so the average input is ','s'],['S','i'],['/4 = ','r'],[Math.round(S/4) + ' W/m²','s']], 'left');
+  rich(c, ix + 14, iy + ih - 18, 13, [[tr('so the average input is ','따라서 평균 입력은 '),'s'],['S','i'],['/4 = ','r'],[Math.round(S/4) + ' W/m²','s']], 'left');
 }
 let orbitCtx;
 function orbitLoop(now){
@@ -962,12 +980,12 @@ function orbitLoop(now){
   }
   requestAnimationFrame(orbitLoop);
 }
-$('orbitPlay').addEventListener('click', () => { ORB.running = !ORB.running; ORB.last = performance.now(); $('orbitPlay').textContent = ORB.running ? 'Pause orbit' : 'Play orbit'; });
+$('orbitPlay').addEventListener('click', () => { ORB.running = !ORB.running; ORB.last = performance.now(); $('orbitPlay').textContent = ORB.running ? tr('Pause orbit','공전 멈춤') : tr('Play orbit','공전 재생'); });
 
 /* ================= LAYOUT ================= */
 presetButtons('presetBtns', SP, 'tS', specRender);
 presetButtons('presetBtns2', QT, 'tS2', totalsRender);
-(function(){ const b = document.createElement('button'); b.type='button'; b.textContent='Sun’s core'; b.dataset.core='1';
+(function(){ const b = document.createElement('button'); b.type='button'; b.textContent=tr('Sun’s core','태양 중심부'); b.dataset.core='1'; window.addEventListener('langchange', () => { b.textContent=tr('Sun’s core','태양 중심부'); });
   b.addEventListener('click', () => { QT.T = 1.5e7; $('tS2').value = Math.log10(1.5e7).toFixed(3); totalsRender(); });
   $('presetBtns2').appendChild(b); })();
 $('tS').value = Math.log10(SP.T).toFixed(3); $('tS2').value = Math.log10(QT.T).toFixed(3);
@@ -984,6 +1002,7 @@ function layout(){
   redrawAll();
 }
 function redrawAll(){ modeRender(); specRender(); totalsRender(); earthRender(); geoRender(); boxDraw(); histDraw(); simStats(); orbitDraw(); }
+window.addEventListener('langchange', () => { document.querySelectorAll('[data-p]').forEach(b => { const p = PRESETS.find(q => q.k===b.dataset.p); if (p) b.textContent = tr(p.name,p.ko); }); $('orbitPlay').textContent = ORB.running ? tr('Pause orbit','공전 멈춤') : tr('Play orbit','공전 재생'); redrawAll(); });
 let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 80); });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); redrawAll(); });
 new MutationObserver(() => { readColors(); redrawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
@@ -991,7 +1010,7 @@ layout();
 new IntersectionObserver(es => { simVisible = es[0].isIntersecting; simLast = performance.now(); }).observe($('boxCanvas'));
 requestAnimationFrame(simLoop);
 new IntersectionObserver(es => { ORB.visible = es[0].isIntersecting; ORB.last = performance.now(); }).observe($('orbitCanvas'));
-$('orbitPlay').textContent = ORB.running ? 'Pause orbit' : 'Play orbit';
+$('orbitPlay').textContent = ORB.running ? tr('Pause orbit','공전 멈춤') : tr('Play orbit','공전 재생');
 requestAnimationFrame(orbitLoop);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
 })();
@@ -1003,13 +1022,138 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll)
   const SUN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>';
   const MOON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
   const current = () => root.dataset.theme || (mq.matches ? "dark" : "light");
-  const sync = () => { const dark = current() === "dark", label = dark ? "Switch to light mode" : "Switch to dark mode";
+  const sync = () => { const dark = current() === "dark", label = dark ? tr("Switch to light mode","밝은 화면으로 전환") : tr("Switch to dark mode","어두운 화면으로 전환");
     btn.innerHTML = dark ? SUN : MOON; btn.setAttribute("aria-label", label); btn.title = label; };
   btn.addEventListener("click", () => { const next = current() === "dark" ? "light" : "dark"; root.dataset.theme = next;
     try { localStorage.setItem("netsci-theme", next); } catch (e) {} sync(); });
   mq.addEventListener("change", sync);
+  window.addEventListener("langchange", sync);
   sync();
 })();
 </script>
+<!-- lang-toggle:body -->
+<script>
+window.I18N_KO={
+"__title": "흑체 복사",
+"k1": "이상훈 교수의 강의 노트(7장 7.4절, 흑체 복사)를 바탕으로 Claude Opus 5.5가 만든 인터랙티브 데모",
+"k2": "흑체 복사",
+"k3": "뜨거운 상자 속의 전자기장을 광자 기체, 곧 화학 퍼텐셜이 0인 보손의 기체로 다룹니다. 그 통계가 달아오른 물체의 색, 슈테판의 \\(T^4\\) 법칙, 우주 배경 복사, 지구의 온도를 설명합니다.",
+"k4": "자외선 파탄",
+"k5": "고전적으로 상자 속 복사는 정상파 무늬들의 조합이며, 각각은 진동수 \\(f = c/\\lambda\\)인 조화 진동자처럼 행동합니다. 진동자마다 2차 자유도가 두 개이므로 에너지 등분배에 따라 평균 에너지는 \\(\\bar{E} = k_{\\mathrm{B}}T\\)입니다. 그런데 모드가 무한히 많고 대부분이 아주 짧은 파장이므로, 전체 열에너지가 무한대가 됩니다. 물리적으로 그럴 수는 없습니다.",
+"k6": "플랑크의 해결책: 양자 진동자의 에너지는 \\(E_n = 0, hf, 2hf, \\ldots\\)입니다(영점 에너지는 \\(Z\\)에 상수만 곱하므로 뺍니다). 진동자 하나의 분배함수는 등비급수이며,",
+"k7": "진동자 안 에너지 단위의 평균 개수가 플랑크 분포입니다:",
+"k8": "\\(hf \\gg k_{\\mathrm{B}}T\\)인 모드는 지수적으로 억제되어 “얼어붙고”, 파탄이 사라집니다. 모드 진동수를 움직이며 비교해 보세요.",
+"k9": "<span class=\"lt\">모드 에너지 \\(hf/k_{\\mathrm{B}}T\\)<\/span>",
+"k10": "모드당 평균 에너지, \\(k_{\\mathrm{B}}T\\) 단위.",
+"k11": "에너지 스펙트럼: 모드의 수가 \\(\\varepsilon^2\\)처럼 늘어나므로 고전 스펙트럼은 한없이 커집니다.",
+"k12": "<span><span class=\"swatch dash\" style=\"border-color:var(--classic)\"><\/span>고전 (에너지 등분배, 레일리–진스)<\/span>\n    <span><span class=\"swatch line\" style=\"background:var(--planck)\"><\/span>플랑크<\/span>",
+"k13": "이 모드의 \\(\\bar{n}_{\\mathrm{Pl}}\\)",
+"k14": "플랑크 \\(\\bar{E}/k_{\\mathrm{B}}T\\)",
+"k15": "고전 \\(\\bar{E}/k_{\\mathrm{B}}T\\)",
+"k16": "보손으로서의 광자",
+"k17": "이제 장 에너지의 단위를 광자라는 입자로 진지하게 다뤄 봅시다. 광자는 보손이므로 \\(\\varepsilon = hf\\)인 보스–아인슈타인 분포를 따라야 합니다. 광자는 얼마든지 생기거나 없어질 수 있어 개수가 보존되지 않습니다: \\(N\\)은 \\(F\\)를 최소로 하는 값이 되며, 이는 \\((\\partial F/\\partial N)_{T,V} = \\mu = 0\\)을 뜻합니다. 그러면 \\(\\bar{n}_{\\mathrm{BE}}\\)는 정확히 \\(\\bar{n}_{\\mathrm{Pl}}\\)입니다.",
+"k18": "광자는 극상대론적이며, \\(n = |\\vec{n}|\\)에 대해 \\(\\varepsilon = pc = hcn/2L\\)이고, 독립된 편광이 두 가지 있습니다(전자의 두 스핀 상태와 같은 역할). \\(n\\) 공간의 구 8분의 1에 있는 모든 모드에 대해 \\(\\varepsilon\\,\\bar{n}_{\\mathrm{Pl}}\\)을 더하면",
+"k19": "피적분 함수가 스펙트럼, 곧 광자 에너지 단위당 에너지 밀도입니다,",
+"k20": "\\(x = \\varepsilon/k_{\\mathrm{B}}T\\)로 쓰면 모양은 \\(x^3/(e^x - 1)\\)이고, \\(x = 2.82\\)에서 최대입니다. 온도가 높을수록 광자 에너지가 높고, 진동수가 크고, 파장이 짧습니다: 빈의 법칙.",
+"k21": "아무 온도에서의 스펙트럼",
+"k22": "온도를 고르세요. 곡선은 로그 축에 자기 최댓값에 대한 비로 그렸으므로, 온도가 오르면 왼쪽으로 미끄러집니다. 곡선을 고정해 비교할 수 있습니다. 색 띠는 가시광선 영역입니다.",
+"k23": "<span><span class=\"swatch line\" style=\"background:var(--planck)\"><\/span>지금 온도<\/span>\n        <span><span class=\"swatch line\" style=\"background:var(--res)\"><\/span>고정한 곡선<\/span>\n        <span id=\"legLam\"><span class=\"swatch dash\" style=\"border-color:var(--cool)\"><\/span>\\(u(\\varepsilon)\\)의 최댓값 위치를 파장으로 바꾼 것<\/span>\n        <span id=\"legEps\" hidden><span class=\"swatch dash\" style=\"border-color:var(--cool)\"><\/span>\\(u(\\lambda)\\)의 최댓값 위치를 에너지로 바꾼 것<\/span>",
+"k24": "<span class=\"lt\">온도 \\(T\\)<\/span>",
+"k25": "파장당",
+"k26": "에너지당",
+"k27": "이 곡선 고정",
+"k28": "고정 지우기",
+"k29": "\\(u(\\lambda)\\)의 최댓값",
+"k30": "\\(u(\\varepsilon)\\)의 최댓값",
+"k31": "파장당은 에너지당과 다르다",
+"k32": "문제 7.39. \\(d\\varepsilon = -hc\\,d\\lambda/\\lambda^2\\)와 함께 변수를 \\(\\lambda = hc/\\varepsilon\\)로 바꾸면 파장 단위당 에너지 밀도를 얻습니다:",
+"k33": "두 최댓값이 다른 것은 \\(\\lambda \\propto 1/\\varepsilon\\)이 비선형이기 때문입니다: 같은 간격 \\(d\\varepsilon\\)이 같지 않은 간격 \\(d\\lambda \\propto d\\varepsilon/\\varepsilon^2\\)에 대응합니다. 패널의 마지막 두 줄을 비교해 보세요. 햇빛에서 \\(u(\\varepsilon)\\)는 1.41 eV에서 최대인데, 이는 근적외선인 880 nm에 해당하지만 \\(u(\\lambda)\\)는 500 nm 근처에서 최대입니다.",
+"k34": "합계: 에너지, 광자 수, 엔트로피, 압력",
+"k35": "\\(\\int_0^\\infty x^3/(e^x-1)\\,dx = \\pi^4/15\\)로 스펙트럼을 적분하면 전체 에너지를 얻고, 나머지도 따라 나옵니다:",
+"k36": "온도를 두 배로 하면 에너지는 16배가 됩니다. 차원 분석만으로도 짐작할 수 있습니다: 광자 하나가 \\(k_{\\mathrm{B}}T\\) 정도를 나르고, 관련된 길이는 광자의 전형적인 파장 \\(hc/k_{\\mathrm{B}}T\\)뿐입니다. 상태 밀도(문제 7.40)는 \\(g(\\varepsilon) = 8\\pi V\\varepsilon^2/(hc)^3\\)입니다.",
+"k37": "여기서 \\(a = 8\\pi^5 k_{\\mathrm{B}}^4 V/15(hc)^3\\)이고 \\(\\int_0^\\infty x^2/(e^x-1)\\,dx = 2\\zeta(3) \\approx 2.404\\)입니다(문제 7.44). \\(S\\)와 \\(N\\)은 \\(V(k_{\\mathrm{B}}T/hc)^3\\)에 똑같이 의존하므로 광자 하나당 엔트로피는 상수 \\(S/N \\approx 3.6\\,k_{\\mathrm{B}}\\)입니다. 압력(문제 7.45)과 자유 에너지(문제 7.46)는",
+"k38": "이며, \\(F\\)는 모드마다 \\(-k_{\\mathrm{B}}T\\ln Z\\)로 구해도 같은 결과입니다. 온도를 골라 숫자를 보세요.",
+"k39": "<span class=\"lt\">온도 \\(T\\)<\/span>",
+"k40": "위의 조절 막대와 따로 움직이므로 두 온도를 비교할 수 있습니다.",
+"k41": "에너지 밀도 \\(U/V\\)",
+"k42": "m³당 광자 수, \\(N/V\\)",
+"k43": "광자의 평균 에너지 \\(U/N\\)",
+"k44": "광자 하나당 엔트로피 \\(S/N\\)",
+"k45": "복사압 \\(P\\)",
+"k46": "비교: 1기압의 공기",
+"k47": "1.01 × 10<sup>5<\/sup> Pa",
+"k48": "단위 넓이당 일률 \\(\\sigma T^4\\)",
+"k49": "문제 7.45에서 비교하듯, 1500 K 가마 안의 복사는 약 \\(1.3 \\times 10^{-3}\\ \\mathrm{Pa}\\), 대기압의 1억분의 1 정도의 압력만 냅니다. 1500만 K인 태양 중심에서는 복사압이 약 \\(1.3 \\times 10^{13}\\ \\mathrm{Pa}\\)에 이르지만, 그곳의 이온화된 수소 기체(밀도 약 \\(10^5\\ \\mathrm{kg/m^3}\\))는 약 \\(2.5 \\times 10^{16}\\ \\mathrm{Pa}\\)로 약 2000배 더 큰 압력을 냅니다.",
+"k50": "우주 배경 복사",
+"k51": "관측 가능한 우주 전체를 채우는 복사는 2.73 K의 거의 완벽한 열 스펙트럼을 가집니다. \\(u(f)\\)는 \\(\\varepsilon = 2.82\\,k_{\\mathrm{B}}T = 6.6 \\times 10^{-4}\\ \\mathrm{eV}\\)에서 최대이며, 이는 원적외선인 약 1 mm 파장에 해당합니다. 공간 1세제곱미터마다 이런 광자가 약 \\(4.1 \\times 10^8\\)개 있습니다. 채널 사이에 맞춘 옛 아날로그 텔레비전의 “눈”의 일부는 빅뱅이 남긴 이 빛에서 왔습니다. 위 스펙트럼에서 <em>우주 배경 복사<\/em>를 골라 보세요.",
+"k52": "구멍으로 빠져나가는 광자",
+"k53": "복사가 든 상자에 넓이 \\(A\\)인 작은 구멍을 뚫어 봅시다. 모든 광자는 파장과 상관없이 같은 속력 \\(c\\)로 움직이므로, 빠져나오는 빛은 안의 빛과 스펙트럼이 같습니다. 시간 \\(dt\\) 동안 얼마나 빠져나오는지 구하려면, 두께 \\(c\\,dt\\)인 반구 껍질 안에서 구멍으로부터 거리 \\(R\\), 각 \\(\\theta\\)에 있는 상자의 덩어리를 생각합니다. \\(dt\\) 동안 구멍에 닿을 수 있는 것은 그 껍질 안의 광자뿐입니다.",
+"k54": "<span><span class=\"swatch\" style=\"background:var(--planck)\"><\/span>덩어리, 부피 \\(R^2\\sin\\theta\\,d\\theta\\,d\\phi\\,c\\,dt\\)<\/span>\n        <span><span class=\"swatch line\" style=\"background:var(--cool)\"><\/span>덩어리에서 본 구멍, \\(A\\cos\\theta\\)<\/span>",
+"k55": "<span class=\"lt\">각 \\(\\theta\\)<\/span>",
+"k56": "겉보기 구멍 넓이",
+"k57": "덩어리 부피 \\(\\propto \\sin\\theta\\)",
+"k58": "기여 \\(\\propto \\sin\\theta\\cos\\theta\\)",
+"k59": "덩어리 속 광자들은 사방을 향하므로, 구멍을 향하는 비율은 구멍의 겉보기 넓이를 구 전체로 나눈 \\(A\\cos\\theta/4\\pi R^2\\)입니다. 정면의 덩어리는 구멍 전체를 보지만 작은 고리이고, 비스듬한 덩어리는 크지만 구멍을 옆에서 봅니다. 곱은 45°에서 최대입니다.",
+"k60": "덩어리에는 에너지 \\((U/V)\\,R^2\\sin\\theta\\,d\\theta\\,d\\phi\\,c\\,dt\\)가 있고, 그 가운데 \\(A\\cos\\theta/4\\pi R^2\\)가 구멍으로 향하며 \\(R\\)은 상쇄됩니다. \\(\\phi\\)를 0부터 \\(2\\pi\\)까지, \\(\\theta\\)를 0부터 \\(\\pi/2\\)까지 적분하면,",
+"k61": "\\(\\tfrac14\\)이라는 인자는 직접 세어 쉽게 확인할 수 있습니다. 아래에서는 광자 2000개가 속력 \\(c\\)로 상자 안을 날아다니며 벽에서 튕기고, 구멍에 닿으면 빠져나갑니다. 안의 복사를 평형으로 유지하기 위해, 빠져나간 광자마다 구멍으로 들어오는 광자 하나로 바꿉니다. 구멍이 같은 온도의 복사로 열려 있는 것과 같습니다. 센 탈출률을 \\(\\tfrac14 (N/V)\\,c\\,A\\)와, 탈출 각을 \\(\\sin\\theta\\cos\\theta\\)와 비교해 보세요.",
+"k62": "<span><span class=\"swatch\" style=\"background:var(--planck)\"><\/span>빠져나간 광자, 구멍의 법선에서 잰 각별<\/span>\n        <span><span class=\"swatch line\" style=\"background:var(--ink)\"><\/span>예측 \\(\\propto \\sin\\theta\\cos\\theta\\)<\/span>",
+"k63": "셈 초기화",
+"k64": "<span class=\"lt\">시뮬레이션 속도<\/span>",
+"k65": "광자 수 \\(N\\)",
+"k66": "구멍 넓이 \\(A\\)",
+"k67": "탈출 수",
+"k68": "탈출률, 측정값",
+"k69": "비",
+"k70": "비율은 시뮬레이션 시간 단위당이며, \\(c = 0.45\\) 상자 길이/단위입니다. 정면에서 본 모습이라 모든 깊이의 광자가 겹치며, 5개 중 1개만 그렸습니다.",
+"k71": "이것이 1879년에 경험적으로 발견된 슈테판의 법칙입니다(“5–6–7–8”로 기억하세요). 같은 온도의 반사하지 않는(“검은”) 표면은 구멍과 같은 일률, 나아가 똑같은 스펙트럼 전체를 내야 합니다. 그렇지 않으면 그 표면을 구멍 옆에 두고 사이에 파장 필터를 놓았을 때 열역학 제2법칙이 깨집니다. 광자를 일부 반사하는 표면은 그만큼 덜 내보냅니다: 일률 \\(= \\sigma e A T^4\\)이며, \\(e\\)는 방출률입니다.",
+"k72": "태양과 지구",
+"k73": "지구는 \\(1.5 \\times 10^{8}\\ \\mathrm{km}\\) 떨어진 곳에서 햇빛을 1370 W/m²(태양 상수) 받으므로, 태양의 전체 출력은 \\(4\\pi (1.5 \\times 10^{11}\\ \\mathrm{m})^2 \\times 1370\\ \\mathrm{W/m^2} \\approx 3.9 \\times 10^{26}\\ \\mathrm{W}\\)입니다. 반지름은 약 \\(7.0 \\times 10^8\\ \\mathrm{m}\\)이므로 방출률을 1로 두면 \\(T_\\odot = (L/\\sigma A)^{1/4} \\approx 5800\\ \\mathrm{K}\\)입니다.",
+"k74": "<span><span class=\"swatch\" style=\"background:var(--sun)\"><\/span>넓이 \\(4\\pi d^2\\)인 구로 퍼지는 햇빛<\/span>\n    <span><span class=\"swatch\" style=\"background:var(--res)\"><\/span>지구가 내보내는 적외선<\/span>\n    <span>실제 비율이 아님: 태양과 지구를 실제보다 훨씬 크게 그렸습니다.<\/span>",
+"k75": "지구는 원판 넓이 \\(\\pi r_E^2\\)로 햇빛을 흡수하지만, 겉넓이 전체 \\(4\\pi r_E^2\\)로 복사합니다. 둘을 맞추면 지구의 온도를 얻습니다:",
+"k76": "대기를 가시광선에는 투명하고 적외선에는 불투명한 층 하나로 모형화해 봅시다. 그러면 평형에서 지표는 햇빛만 있을 때의 두 배 에너지를 받아 온도가 \\(2^{1/4}\\)배 오릅니다: 온실 효과입니다.",
+"k77": "지표 전체에 대해 평균한 에너지 흐름, W/m² 단위. 햇빛(주로 가시광선)은 금색, 적외선은 회색으로 그렸습니다. 화살표 굵기는 흐름에 비례합니다.",
+"k78": "완전한 흑체",
+"k79": "30% 반사",
+"k80": "온실 효과 포함",
+"k81": "<span class=\"lt\">태양 표면 \\(T_\\odot\\)<\/span>",
+"k82": "<span class=\"lt\">태양으로부터의 거리<\/span>",
+"k83": "<small>천문단위(1 AU = \\(1.5 \\times 10^8\\) km)입니다. 금성은 0.72, 화성은 1.52입니다.<\/small>",
+"k84": "<span class=\"lt\">반사율 (반사되는 비율)<\/span>",
+"k85": "층 하나짜리 온실 대기",
+"k86": "태양 상수",
+"k87": "실제 평균 지표 온도",
+"k88": "층 하나짜리 모형은 너무 높게 나오는데(303 K), 실제 대기는 완전히 불투명한 층 하나가 아니기 때문입니다. 실제 온실(비닐하우스)은 대부분 다른 방식, 곧 대류에 의한 냉각을 막는 방식으로 작동합니다. 기본 태양 온도 5772 K는 태양 상수 1370 W/m²를 약 1% 이내로 재현합니다.",
+"k89": "양자 통계에 관한 이상훈 교수의 강의 노트(7.4절, 흑체 복사, 문제 7.39, 7.40, 7.44, 7.45, 7.46 포함)를 바탕으로 Claude Opus 5.5가 만들었습니다.",
+"k90": "상수: \\(h = 6.626 \\times 10^{-34}\\ \\mathrm{J\\,s}\\), \\(k_{\\mathrm{B}} = 1.381 \\times 10^{-23}\\ \\mathrm{J/K}\\), \\(c = 2.998 \\times 10^8\\ \\mathrm{m/s}\\), \\(\\sigma = 5.670 \\times 10^{-8}\\ \\mathrm{W\\,m^{-2}\\,K^{-4}}\\). 색은 CIE 1931 등색 함수의 해석적 근사(Wyman, Sloan, Shirley, 2013)를 썼습니다. 수식은 MathJax로 조판했습니다."
+};
+(function(){
+  // English / 한국어 switch shared by the course demos; the choice is remembered across pages
+  var KEY='lshlj82-demo-lang', root=document.documentElement, KO=window.I18N_KO||{}, EN={};
+  var els=[].slice.call(document.querySelectorAll('[data-k]'));
+  els.forEach(function(e){EN[e.getAttribute('data-k')]=e.innerHTML;});
+  var titleEN=document.title;
+  var btn=document.createElement('button');btn.id='langBtn';btn.type='button';document.body.appendChild(btn);
+  function typeset(list){
+    if(!list.length)return;
+    if(window.MathJax&&MathJax.typesetPromise){var go=function(){MathJax.typesetPromise(list).catch(function(){});};
+      if(MathJax.startup&&MathJax.startup.promise)MathJax.startup.promise.then(go);else go();}
+    if(window.renderMathInElement&&window.KATEX_OPTS)list.forEach(function(e){try{renderMathInElement(e,window.KATEX_OPTS)}catch(_){}}); 
+  }
+  function apply(l,first){
+    window.LANG=l;root.dataset.lang=l;root.lang=l;var changed=[];
+    els.forEach(function(e){var k=e.getAttribute('data-k'),s=(l==='ko'&&KO[k]!=null)?KO[k]:EN[k];if(e.innerHTML!==s){e.innerHTML=s;changed.push(e);}});
+    document.title=(l==='ko'&&KO.__title)?KO.__title:titleEN;
+    btn.textContent=l==='ko'?'EN':'한국어';btn.setAttribute('aria-label',l==='ko'?'View in English':'한국어로 보기');btn.title=btn.getAttribute('aria-label');
+    btn.setAttribute('lang',l==='ko'?'en':'ko');
+    if(!first)typeset(changed);
+    window.dispatchEvent(new CustomEvent('langchange',{detail:{lang:l}}));
+    // canvases drawn before the Korean web font arrives are redrawn once it has loaded
+    if(l==='ko'&&document.fonts&&!document.fonts.check('16px "IBM Plex Sans KR"','가'))document.fonts.load('16px "IBM Plex Sans KR"','가').then(function(){if(window.LANG==='ko')window.dispatchEvent(new CustomEvent('langchange',{detail:{lang:'ko'}}));}).catch(function(){});
+  }
+  btn.addEventListener('click',function(){var n=window.LANG==='ko'?'en':'ko';try{localStorage.setItem(KEY,n)}catch(e){}apply(n,false);});
+  apply(window.LANG||'en',true);
+})();
+</script>
+<!-- lang-toggle:body-end -->
 </body>
 </html>
