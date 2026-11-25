@@ -201,6 +201,7 @@ html :lang(ko) em, html[data-lang="ko"] em{font-weight:600}
     <p data-k="k19">The integrand is the spectrum: the energy density per unit photon energy,</p>
     <div class="eq"><span class="boxed">\( \displaystyle u(\varepsilon) = \frac{8\pi}{(hc)^3}\,\frac{\varepsilon^3}{e^{\varepsilon/k_{\mathrm{B}}T} - 1} \)</span></div>
     <p data-k="k20">With \(x = \varepsilon/k_{\mathrm{B}}T\) its shape is \(x^3/(e^x - 1)\), which peaks at \(x = 2.82\). Higher temperature means higher photon energies, larger frequency, and shorter wavelength: Wien’s law.</p>
+    <p class="note" data-k="k91">Why \(\varepsilon = pc\) for a photon but \(p^2/2m\) for an electron, and why that turns \(g \propto \sqrt{\varepsilon}\) into \(g \propto \varepsilon^2\)? See the companion demo <a href="https://lshlj82.github.io/electron-vs-photon/">Electrons and Photons</a>.</p>
   </div>
 </section>
 
@@ -1038,6 +1039,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll)
 <!-- lang-toggle:body -->
 <script>
 window.I18N_KO={
+"k91": "광자는 왜 \\(\\varepsilon = pc\\)이고 전자는 \\(p^2/2m\\)일까요? 그리고 그 차이가 어떻게 \\(g \\propto \\sqrt{\\varepsilon}\\)를 \\(g \\propto \\varepsilon^2\\)으로 바꿀까요? 함께 보는 데모 <a href=\"https://lshlj82.github.io/electron-vs-photon/\">전자와 광자<\/a>를 보세요.",
 "__title": "흑체 복사",
 "k1": "이상훈 교수의 강의 노트(7장 7.4절, 흑체 복사)를 바탕으로 Claude Opus 5.5가 만든 인터랙티브 데모",
 "k2": "흑체 복사",
